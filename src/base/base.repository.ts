@@ -9,9 +9,9 @@ import {
 } from 'typeorm';
 
 import { PAGE_SIZE } from '@config/index';
+import { trim } from '@utils/util';
 
 import { PaginationResponse } from './base.dto';
-import { trim } from '@utils/util';
 
 export class BaseRepository<T extends BaseEntity> extends Repository<T> {
     protected _repository: Repository<T>;

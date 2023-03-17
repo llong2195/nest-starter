@@ -14,7 +14,9 @@ import { ValidatorsModule } from '@validators/validators.module';
 import { AppController } from './app.controller';
 import { DatabaseModule } from './database/database.module';
 import { AllExceptionFilter } from './filter/exception.filter';
+import { ThrottlerBehindProxyGuard } from './guard/throttler-behind-proxy.guard';
 import { I18nModule } from './i18n/i18n.module';
+import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
 import { LoggerModule } from './logger/logger.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -25,9 +27,7 @@ import { HealthModule } from './modules/health/health.module';
 import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { UserModule } from './modules/user/user.module';
-import { ThrottlerBehindProxyGuard } from './guard/throttler-behind-proxy.guard';
 import { isDev } from './utils';
-import { LoggingInterceptor } from './interceptors/logging.interceptor';
 
 const providers = [] as Provider[];
 if (isDev()) {

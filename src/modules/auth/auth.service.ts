@@ -2,10 +2,10 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
 import { AuthUserDto } from '@base/base.dto';
+import { ErrorMessageCode } from '@constants/error-message-code';
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
-import { ErrorMessageCode } from '@constants/error-message-code';
 
 import { UserEntity } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
@@ -28,11 +28,11 @@ export class AuthService {
     async validateUser(email: string, password: string): Promise<UserEntity | undefined> {
         const user = await this.userService.findByEmail(email);
         if (!user) {
-            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
         const compareResult = await bcrypt.compare(password, user.password);
         if (!compareResult) {
-            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
         return user;
     }
@@ -46,11 +46,11 @@ export class AuthService {
     async login(request: LoginRequestDto): Promise<any> {
         const user = await this.userService.findByEmail(request.email);
         if (!user) {
-            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
         const compareResult = await bcrypt.compare(request.password, user.password);
         if (!compareResult) {
-            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
         if (!user.isActive) {
             throw new UnauthorizedException(ErrorMessageCode.DISABLED_ACCOUNT);

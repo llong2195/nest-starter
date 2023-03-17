@@ -45,7 +45,7 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
     async uploadImageToCloudinary(file: Express.Multer.File, userId: number, tags?: string): Promise<FileEntity> {
         try {
             if (!file) {
-                throw new BadRequestException(ErrorMessageCode.FILE_NOT_FOUND);
+                throw new BadRequestException(ErrorMessageCode.NOT_FOUND);
             }
             console.log(file);
             const path = process.cwd() + `/${UPLOAD_LOCATION}/${file.filename}`;

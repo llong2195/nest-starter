@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
+
 export class BaseError extends HttpException {
     protected errorCode: number;
 
