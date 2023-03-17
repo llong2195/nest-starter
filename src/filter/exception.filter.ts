@@ -9,11 +9,11 @@ import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Injec
 import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-host.interface';
 import * as Sentry from '@sentry/node';
 import { SENTRY_DSN } from '@src/configs';
+import { I18nService } from '@src/i18n/i18n.service';
 import { IResponseBody } from '@src/interface';
 
 import { ErrorCode } from '../constants/error-code';
 import { isDev } from '../utils/util';
-import { I18nService } from '@src/i18n/i18n.service';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
