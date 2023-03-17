@@ -14,6 +14,7 @@ import { ValidatorsModule } from '@validators/validators.module';
 import { AppModule } from './app.module';
 import { EnvEnum } from './enums/app.enum';
 import { isEnv } from './utils/util';
+
 declare const module: any;
 
 async function bootstrap() {

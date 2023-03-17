@@ -16,7 +16,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
         if (err || !user || info) {
             LoggerService.error(err, user, info, context.switchToHttp().getRequest().ip, status);
-            throw new UnauthorizedException(ErrorMessageCode.INVALID_TOKEN);
+            throw new UnauthorizedException(ErrorMessageCode.AUTH_INVALID_TOKEN);
         }
         return super.handleRequest(err, user, info, context, status);
     }
