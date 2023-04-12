@@ -2,26 +2,29 @@ import { useContainer } from 'class-validator';
 import { json, urlencoded } from 'express';
 import helmet from 'helmet';
 
-import { INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
+import { ForbiddenException, INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationConfig } from '@src/configs/validation.config';
+
+import { ValidationConfig } from '@configs/validation.config';
 import { LoggerService } from '@src/logger/custom.logger';
 import { ValidatorsModule } from '@validators/validators.module';
 
 import { AppModule } from './app.module';
 import { EnvEnum } from './enums/app.enum';
 import { isEnv } from './utils/util';
+// import { runInCluster } from './utils/runInCluster';
 
+// import bodyParser from 'body-parser';
 declare const module: any;
 
 async function bootstrap() {
     let logLevelsDefault: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
 
     if (isEnv(EnvEnum.Production) || isEnv(EnvEnum.Staging)) {
-        const logLevel = process.env.LOG_LEVEL || 'error,debug,verbose';
+        const logLevel = process.env.LOG_LEVEL || 'log,error,warn,debug,verbose';
         logLevelsDefault = logLevel.split(',') as LogLevel[];
     }
     const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(), {
@@ -66,7 +69,12 @@ async function bootstrap() {
                 if (DOMAIN_WHITELIST.indexOf(origin) !== -1) {
                     callback(null, true);
                 } else {
-                    callback(new Error());
+                    callback(
+                        new ForbiddenException(
+                            `The CORS policy for this site does not allow access from the specified Origin.`,
+                        ),
+                        false,
+                    );
                 }
             },
             optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -107,3 +115,5 @@ async function ConfigDocument(app: INestApplication): Promise<void> {
 }
 
 bootstrap();
+
+// runInCluster(bootstrap);

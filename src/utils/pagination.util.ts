@@ -1,5 +1,5 @@
-import { PaginationResponse } from '@base/base.dto';
-import { PAGE_SIZE } from '@config/config';
+import { PaginationResponse } from '@base/pagination.dto';
+import { PAGE_SIZE } from '@configs/config';
 
 /**
  * It takes an array of items, a total number of items, a page number, and a page size, and returns a

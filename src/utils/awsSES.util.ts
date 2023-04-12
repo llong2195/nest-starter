@@ -1,6 +1,6 @@
 import * as AWS from 'aws-sdk';
 
-import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY } from '@config/config';
+import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY } from '@configs/config';
 
 const singletonEnforcer = Symbol();
 

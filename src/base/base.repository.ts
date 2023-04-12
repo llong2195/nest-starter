@@ -1,24 +1,23 @@
 import {
     BaseEntity,
     EntityManager,
+    EntityTarget,
     FindManyOptions,
     FindOptionsSelect,
     FindOptionsWhere,
+    QueryRunner,
     Repository,
     SelectQueryBuilder,
 } from 'typeorm';
 
-import { PAGE_SIZE } from '@config/index';
+import { PAGE_SIZE } from '@configs/index';
 import { trim } from '@utils/util';
 
-import { PaginationResponse } from './base.dto';
+import { PaginationResponse } from './pagination.dto';
 
 export class BaseRepository<T extends BaseEntity> extends Repository<T> {
-    protected _repository: Repository<T>;
-
-    constructor(repository: Repository<T>) {
-        super(repository.target, repository.manager, repository.queryRunner);
-        this._repository = repository;
+    constructor(target: EntityTarget<T>, manager: EntityManager, queryRunner?: QueryRunner) {
+        super(target, manager, queryRunner);
     }
 
     /**
@@ -33,7 +32,7 @@ export class BaseRepository<T extends BaseEntity> extends Repository<T> {
         if (manager != undefined && manager != null) {
             return await operation(manager);
         } else {
-            return await this._repository.manager.transaction(async manager => {
+            return await this.manager.transaction(async manager => {
                 return await operation(manager);
             });
         }
@@ -56,9 +55,9 @@ export class BaseRepository<T extends BaseEntity> extends Repository<T> {
         fields?: FindOptionsSelect<T>,
         manyOptions?: FindManyOptions<T>,
     ): Promise<PaginationResponse<T>> {
-        const total = await this._repository.count({ where: options });
+        const total = await this.count({ where: options });
         const offset = page === 1 ? 0 : limit * (page - 1);
-        const items = await this._repository.find({
+        const items = await this.find({
             where: options,
             select: fields,
             skip: offset,
@@ -107,17 +106,13 @@ export class BaseRepository<T extends BaseEntity> extends Repository<T> {
 
         const total = await queryBuilder.getCount();
         const data = await queryBuilder.take(limit).skip(skip).getRawMany();
-        const tableName = customTable ?? this._repository.metadata.tableName;
+        const tableName = customTable ?? this.metadata.tableName;
 
         const results: T[] = data.map(item => {
             const a: Record<string, unknown> = {};
 
             Object.keys(item).forEach(key => {
-                if (key.lastIndexOf('id') === key.length - 2) {
-                    a[trim(key, tableName + '_')] = parseInt(item[key], 10);
-                } else {
-                    a[trim(key, tableName + '_')] = item[key];
-                }
+                a[trim(key, tableName + '_')] = item[key];
             });
             return a as T;
         });

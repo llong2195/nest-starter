@@ -1,14 +1,15 @@
 import * as fs from 'fs';
-import { LoggerService } from 'src/logger/custom.logger';
+
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { BaseService } from '@base/base.service';
+import { FileEntity } from '@entities/file.entity';
 import { FileType } from '@enums/file.enum';
-import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { API_PREFIX, SERVER_URL, UPLOAD_LOCATION } from '@src/configs/config';
 import { ErrorMessageCode } from '@src/constants';
 import { cloudinary } from '@src/utils/cloudinary.util';
 
-import { FileEntity } from './entities/file.entity';
+import { LoggerService } from 'src/logger/custom.logger';
 import { FileRepository } from './file.repository';
 
 @Injectable()

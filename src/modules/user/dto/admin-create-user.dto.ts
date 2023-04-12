@@ -1,6 +1,7 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
+import { IsBoolean, IsEmail, IsNotEmpty, Length, Validate } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
+
 import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
 import { UniqueEmailValidator } from '@validators/unique-email.validator';
 

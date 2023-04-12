@@ -14,10 +14,10 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { EntityId } from 'typeorm/repository/EntityId';
 
 import { PAGE_SIZE } from '@src/configs/config';
-import { pagination, trim } from '@utils/index';
+import { trim } from '@utils/index';
 
-import { PaginationResponse } from './base.dto';
 import { IBaseService } from './i.base.service';
+import { PaginationResponse } from './pagination.dto';
 
 export class BaseService<T extends BaseEntity, R extends Repository<T>> implements IBaseService<T> {
     protected readonly repository: R;
@@ -54,7 +54,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
      * @param page - 0 - The page number to return.
      * @returns An array of objects of type T.
      */
-    async _findByDeleted(deleted: boolean, sort: boolean, page: 0): Promise<T[] | null> {
+    async _findByDeleted(deleted: boolean, sort: boolean, page = 0): Promise<T[] | null> {
         return await this.repository.find({
             where: { deleted: deleted } as unknown as FindOptionsWhere<T>,
             skip: page * PAGE_SIZE,
@@ -153,7 +153,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
      * @param ids - [EntityId] - an array of entity ids
      * @returns An array of entities or null.
      */
-    async _findByIds(ids: [EntityId]): Promise<T[] | null> {
+    async _findByIds(ids: EntityId[]): Promise<T[] | null> {
         return this.repository.find({
             where: { id: In(ids) } as unknown as FindOptionsWhere<T>,
         });
@@ -217,7 +217,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
      * don't pass this, it will use the table name of the repository.
      * @returns {PaginationResponse} A pagination response object
      */
-    async iPaginateCustom<T>(
+    async _iPaginateCustom<T>(
         queryBuilder: SelectQueryBuilder<T>,
         page: number,
         limit: number,
@@ -233,11 +233,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
             const a: Record<string, unknown> = {};
 
             Object.keys(item).forEach(key => {
-                if (key.lastIndexOf('id') === key.length - 2) {
-                    a[trim(key, tableName + '_')] = parseInt(item[key], 10);
-                } else {
-                    a[trim(key, tableName + '_')] = item[key];
-                }
+                a[trim(key, tableName + '_')] = item[key];
             });
             return a as T;
         });

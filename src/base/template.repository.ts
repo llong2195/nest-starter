@@ -1,8 +1,8 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 
+import { UserEntity } from '@entities/index';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '@src/modules/user/entities/user.entity';
 
 import { BaseRepository } from './base.repository';
 
@@ -23,6 +23,25 @@ export class TemplateRepository extends Repository<UserEntity> {
  **/
 @Injectable()
 export class Template2Repository extends Repository<UserEntity> {
+    constructor(private readonly dataSource: DataSource, manager?: EntityManager) {
+        let sManager;
+        let sQueryRunner;
+        if (manager && manager != undefined && manager != null) {
+            sQueryRunner = manager.queryRunner;
+            sManager = manager;
+        } else {
+            sManager = dataSource?.createEntityManager();
+            sQueryRunner = dataSource?.createQueryRunner();
+        }
+        super(UserEntity, sManager, sQueryRunner);
+    }
+}
+/**
+ * Template Custom Repository: TemplateRepository extends Repository<Entity>
+ *
+ **/
+@Injectable()
+export class Template3Repository extends Repository<UserEntity> {
     constructor(private dataSource: DataSource) {
         super(UserEntity, dataSource.manager);
     }
@@ -33,8 +52,8 @@ export class Template2Repository extends Repository<UserEntity> {
  *
  **/
 @Injectable()
-export class Template3Repository extends BaseRepository<UserEntity> {
+export class Template4Repository extends BaseRepository<UserEntity> {
     constructor(@InjectRepository(UserEntity) repository: Repository<UserEntity>) {
-        super(repository);
+        super(repository.target, repository.manager, repository.queryRunner);
     }
 }
