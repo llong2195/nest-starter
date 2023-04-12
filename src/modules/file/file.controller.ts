@@ -1,12 +1,10 @@
-import { plainToClass, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import contentDisposition from 'content-disposition';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { createReadStream, existsSync, statSync } from 'fs';
 import mime from 'mime-types';
 import { join } from 'path';
-import { AuthUser } from 'src/decorators/auth.user.decorator';
 
-import { AuthUserDto, BaseResponseDto, iPaginationOption, PaginationResponse } from '@base/base.dto';
 import {
     Controller,
     Get,
@@ -18,22 +16,21 @@ import {
     Param,
     Post,
     Query,
-    Req,
     Res,
     StreamableFile,
     UploadedFile,
-    UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { UPLOAD_LOCATION } from '@src/configs/config';
-import { multerOptions } from '@src/configs/multer.config';
-import { Roles } from '@src/decorators/role.decorators';
-import { RoleEnum } from '@src/enums';
-import { FileEntity } from '@src/modules/file/entities/file.entity';
 
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { BaseResponseDto, CurrentUserDto } from '@base/base.dto';
+import { PaginationResponse, PaginationOption } from '@base/pagination.dto';
+import { UPLOAD_LOCATION, multerOptions } from '@configs/index';
+import { Authorize, CurrentUser } from '@decorators/index';
+import { FileEntity } from '@entities/file.entity';
+import { RoleEnum } from '@src/enums';
+
 import { CreateFileDto } from './dto/create-file.dto';
 import { FileService } from './file.service';
 
@@ -52,9 +49,9 @@ export class FileController {
     @HttpCode(HttpStatus.OK)
     @UseInterceptors(FileInterceptor('file', multerOptions))
     @Post('/upload-image-local')
-    async local(@UploadedFile() file: Express.Multer.File, @AuthUser() authUser?: AuthUserDto) {
-        const uploadfile = await this.uploadFileService.uploadFile(authUser?.id, file);
-        return new BaseResponseDto<FileEntity>(plainToClass(FileEntity, uploadfile));
+    async local(@UploadedFile() file: Express.Multer.File, @CurrentUser() currentUserDto?: CurrentUserDto) {
+        const uploadfile = await this.uploadFileService.uploadFile(currentUserDto?.id, file);
+        return new BaseResponseDto<FileEntity>(plainToInstance(FileEntity, uploadfile));
     }
 
     // @UseGuards(JwtAuthGuard)
@@ -68,20 +65,19 @@ export class FileController {
     @UseInterceptors(FileInterceptor('file', multerOptions))
     async cloud(
         @UploadedFile() file: Express.Multer.File,
-        @AuthUser() authUser?: AuthUserDto,
+        @CurrentUser() currentUserDto?: CurrentUserDto,
     ): Promise<BaseResponseDto<FileEntity>> {
         try {
-            const data = await this.uploadFileService.uploadImageToCloudinary(file, authUser?.id);
+            const data = await this.uploadFileService.uploadImageToCloudinary(file, currentUserDto?.id);
             return new BaseResponseDto<FileEntity>(plainToInstance(FileEntity, data));
         } catch (error) {
             throw new HttpException(error.message, 500);
         }
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Roles(RoleEnum.ADMIN)
+    @Authorize(RoleEnum.ADMIN)
     @Get('/get-all')
-    async getAll(@Query() filter: iPaginationOption): Promise<PaginationResponse<FileEntity>> {
+    async getAll(@Query() filter: PaginationOption): Promise<PaginationResponse<FileEntity>> {
         const data = await this.uploadFileService._paginate(filter.page, filter.limit, { deleted: filter.deleted });
         return new PaginationResponse<FileEntity>(data.body, data.meta);
     }
@@ -90,7 +86,6 @@ export class FileController {
     async stream(
         @Param('path') path: string,
         @Headers() headers,
-        @Req() req: Request,
         @Res({ passthrough: true }) res: Response,
         @Query('download') download = 'false',
     ): Promise<any> {

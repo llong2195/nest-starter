@@ -1,13 +1,13 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
-import { AuthUserDto } from '@base/base.dto';
+import { CurrentUserDto } from '@base/base.dto';
 import { ErrorMessageCode } from '@constants/error-message-code';
+import { UserEntity } from '@entities/user.entity';
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 
-import { UserEntity } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { LoginRequestDto } from './dto/login-request.dto';
 
@@ -53,12 +53,12 @@ export class AuthService {
             throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
         if (!user.isActive) {
-            throw new UnauthorizedException(ErrorMessageCode.DISABLED_ACCOUNT);
+            throw new UnauthorizedException(ErrorMessageCode.AUTH_DISABLED_ACCOUNT);
         }
         if (user.deleted) {
-            throw new HttpException(ErrorMessageCode.DELETED_ACCOUNT, HttpStatus.BAD_REQUEST);
+            throw new HttpException(ErrorMessageCode.AUTH_DELETED_ACCOUNT, HttpStatus.BAD_REQUEST);
         }
-        const payload: AuthUserDto = {
+        const payload: CurrentUserDto = {
             email: user.email,
             id: user.id,
             role: user.role,
@@ -68,11 +68,11 @@ export class AuthService {
     }
 
     /**
-     * It takes a payload, which is an object of type AuthUserDto, and returns a token
-     * @param {AuthUserDto} payload - The data to be encrypted.
+     * It takes a payload, which is an object of type CurrentUserDto, and returns a token
+     * @param {CurrentUserDto} payload - The data to be encrypted.
      * @returns A JWT token
      */
-    async createToken(payload: AuthUserDto) {
+    async createToken(payload: CurrentUserDto) {
         return await this.jwtService.signAsync(payload);
     }
 

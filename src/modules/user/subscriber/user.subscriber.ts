@@ -3,7 +3,7 @@ import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, Up
 
 import { ConfigService } from '@nestjs/config';
 
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '@entities/user.entity';
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {

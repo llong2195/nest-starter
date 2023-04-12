@@ -1,12 +1,12 @@
 import { plainToClass, plainToInstance } from 'class-transformer';
-import { AuthUser } from 'src/decorators/auth.user.decorator';
 
-import { AuthUserDto, BaseResponseDto } from '@base/base.dto';
+import { BaseResponseDto, CurrentUserDto } from '@base/base.dto';
+import { CurrentUser } from '@decorators/current.user.decorator';
+import { UserEntity } from '@entities/user.entity';
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 
-import { UserEntity } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { LoginRequestDto } from './dto/login-request.dto';
@@ -18,7 +18,6 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 export class AuthController {
     constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
 
-    // @UseGuards(LocalAuthGuard)
     @HttpCode(HttpStatus.OK)
     @Throttle(10, 10)
     @Post('/login')
@@ -30,8 +29,8 @@ export class AuthController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Get('/my-profile')
-    async myProfile(@AuthUser() authUser: AuthUserDto): Promise<BaseResponseDto<UserEntity>> {
-        const user = await this.userService.findById(authUser.id);
+    async myProfile(@CurrentUser() currentUser: CurrentUserDto): Promise<BaseResponseDto<UserEntity>> {
+        const user = await this.userService.findById(currentUser.id);
         return new BaseResponseDto<UserEntity>(plainToClass(UserEntity, user));
     }
 

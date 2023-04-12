@@ -1,8 +1,10 @@
-import { BaseService } from '@base/base.service';
 import { Injectable } from '@nestjs/common';
+
+import { BaseService } from '@base/base.service';
 import { LoggerService } from '@src/logger/custom.logger';
 
-import { SettingEntity } from './entities/setting.entity';
+import { SettingEntity } from '@entities/setting.entity';
+
 import { SettingRepository } from './setting.repository';
 
 @Injectable()
