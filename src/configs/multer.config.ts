@@ -4,7 +4,8 @@ import { extname } from 'path';
 
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
-import { getFullDate } from '@src/utils/util';
+
+import { getFullDate } from '@utils/util';
 
 import { UPLOAD_LOCATION } from './config';
 import { MAX_FILE_SIZE } from './index';

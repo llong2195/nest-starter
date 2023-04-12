@@ -7,7 +7,7 @@
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-        "target": "es2017",
+        "target": "ES2021",
         "newLine": "lf",
         "sourceMap": true,
         "outDir": "./dist",
@@ -20,7 +20,7 @@
         "forceConsistentCasingInFileNames": false,
         "noFallthroughCasesInSwitch": false,
         "paths": {
-            "@config/*": ["src/configs/*"],
+            "@configs/*": ["src/configs/*"],
             "@base/*": ["src/base/*"],
             "@validators/*": ["src/validators/*"],
             "@modules/*": ["src/modules/*"],
@@ -29,6 +29,7 @@
             "@enums/*": ["src/enums/*"],
             "@constants/*": ["src/constants/*"],
             "@entities/*": ["src/entities/*"],
+            "@guard/*": ["src/guard/*"],
             "@utils/*": ["src/utils/*"],
             "@libs/*": ["src/libs/*"],
             "@src/*": ["src/*"]

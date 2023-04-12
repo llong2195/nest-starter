@@ -1,6 +1,5 @@
 import { join } from 'path';
 
-import { appConfig, authConfig, databaseConfig } from '@config/index';
 import { HttpModule } from '@nestjs/axios';
 import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
 import { MiddlewareConsumer, Module, NestModule, Provider } from '@nestjs/common';
@@ -8,7 +7,19 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
-import { QueueModule } from '@src/modules/queue/queue.module';
+
+import { appConfig, authConfig, databaseConfig } from '@configs/index';
+import { EnvEnum } from '@enums/index';
+import { AuthModule } from '@modules/auth/auth.module';
+import { CommanderModule } from '@modules/commander/commander.module';
+import { CronModule } from '@modules/cron/cron.module';
+import { FileModule } from '@modules/file/file.module';
+import { NodemailerModule } from '@modules/nodemailer/nodemailer.module';
+import { QrCodeModule } from '@modules/qr-code/qr-code.module';
+import { QueueModule } from '@modules/queue/queue.module';
+import { SettingModule } from '@modules/setting/setting.module';
+import { UserModule } from '@modules/user/user.module';
+import { isEnv } from '@utils/index';
 import { ValidatorsModule } from '@validators/validators.module';
 
 import { AppController } from './app.controller';
@@ -19,18 +30,15 @@ import { I18nModule } from './i18n/i18n.module';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
 import { LoggerModule } from './logger/logger.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { CommanderModule } from './modules/commander/commander.module';
-import { CronModule } from './modules/cron/cron.module';
-import { FileModule } from './modules/file/file.module';
-import { HealthModule } from './modules/health/health.module';
-import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
-import { SettingModule } from './modules/setting/setting.module';
-import { UserModule } from './modules/user/user.module';
-import { isDev } from './utils';
 
 const providers = [] as Provider[];
-if (isDev()) {
+
+if (isEnv(EnvEnum.Production)) {
+    providers.push({
+        provide: APP_GUARD,
+        useClass: ThrottlerBehindProxyGuard,
+    });
+} else {
     providers.push({
         provide: APP_INTERCEPTOR,
         useClass: LoggingInterceptor,
@@ -69,6 +77,10 @@ if (isDev()) {
                         host: config.get<string>('REDIS_HOST'),
                         port: config.get<number>('REDIS_PORT'),
                     },
+                    defaultJobOptions: {
+                        removeOnComplete: true,
+                        attempts: 10,
+                    },
                 } as BullRootModuleOptions),
         }),
 
@@ -84,7 +96,6 @@ if (isDev()) {
         LoggerModule,
         I18nModule,
         DatabaseModule,
-        HealthModule,
         ValidatorsModule,
         SettingModule,
         CronModule,
@@ -94,6 +105,7 @@ if (isDev()) {
         NodemailerModule,
         QueueModule,
         CommanderModule,
+        QrCodeModule,
         // IORedisModule.registerAsync({
         //     imports: [ConfigModule],
         //     useFactory: async (configService: ConfigService): Promise<IRedisModuleOptions> => {
@@ -126,10 +138,6 @@ if (isDev()) {
             provide: APP_INTERCEPTOR,
             useClass: ResponseTransformInterceptor,
         },
-        // {
-        //     provide: APP_GUARD,
-        //     useClass: ThrottlerBehindProxyGuard,
-        // },
         ...providers,
     ],
 })
