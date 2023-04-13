@@ -1,7 +1,7 @@
 import { DEFAULT_LOCALE } from '@configs/config';
 import { Injectable } from '@nestjs/common';
 
-import langs from './index';
+import langs from './locales/index';
 
 @Injectable()
 export class MessageService {

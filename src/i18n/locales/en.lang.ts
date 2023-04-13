@@ -1,6 +1,5 @@
 const lang = new Map<string, string>();
 
-lang.set('SUCCESS', 'success');
 lang.set('SUCCESS', 'success.');
 lang.set('UNKNOWN', 'unknown.');
 lang.set('INVALID', 'invalid.');
