@@ -5,6 +5,6 @@ export enum EnvEnum {
 }
 
 export enum LOCALES {
-    EN = 'en',
+    EN = 'en-US',
     VI = 'vi',
 }

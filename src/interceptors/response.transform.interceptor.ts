@@ -16,10 +16,7 @@ export class ResponseTransformInterceptor<T> implements NestInterceptor<T, BaseR
         return next.handle().pipe(
             map(response => {
                 if (response?.message) {
-                    return {
-                        ...response,
-                        message: this.i18n.lang(response?.message, lang),
-                    };
+                    return { ...response, message: this.i18n.lang(response?.message, lang) };
                 }
                 return response;
             }),
