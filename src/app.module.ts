@@ -30,6 +30,7 @@ import { I18nModule } from './i18n/i18n.module';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
 import { LoggerModule } from './logger/logger.module';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 
 const providers = [] as Provider[];
 
@@ -50,6 +51,15 @@ if (isEnv(EnvEnum.Production)) {
             isGlobal: true,
             envFilePath: ['.env'],
             load: [appConfig, databaseConfig, authConfig],
+        }),
+
+        DevtoolsModule.registerAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: (config: ConfigService) => ({
+                http: config.get<string>('NODE_ENV') !== EnvEnum.Production,
+                port: config.get<number>('port'),
+            }),
         }),
 
         ServeStaticModule.forRoot({
