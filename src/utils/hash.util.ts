@@ -1,5 +1,4 @@
-import * as bcrypt from 'bcrypt';
-
+import { compareSync, hashSync } from 'bcrypt';
 import { BCRYPT_SALT } from '../configs';
 
 export class Hash {
@@ -10,7 +9,7 @@ export class Hash {
      * @returns A string
      */
     static make(plainText: string | Buffer, salt = BCRYPT_SALT): string {
-        return bcrypt.hashSync(plainText, salt);
+        return hashSync(plainText, salt);
     }
 
     /**
@@ -21,6 +20,6 @@ export class Hash {
      * @returns A boolean value.
      */
     static compare(plainText: string | Buffer, hash: string): boolean {
-        return bcrypt.compareSync(plainText, hash);
+        return compareSync(plainText, hash);
     }
 }

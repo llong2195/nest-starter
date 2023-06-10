@@ -36,7 +36,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
      * will be created.
      * @returns The return value of the operation function.
      */
-    async transactionWrap(operation: (...args) => unknown, manager?: EntityManager) {
+    async transactionWrap<K>(operation: (...args) => K, manager?: EntityManager) {
         if (manager != undefined) {
             return await operation(manager);
         } else {
