@@ -29,6 +29,7 @@ async function bootstrap() {
     }
     const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(), {
         logger: logLevelsDefault,
+        snapshot: true,
     });
     // ------------- Config ---------------
     const configService = app.get(ConfigService);
@@ -42,7 +43,6 @@ async function bootstrap() {
     app.use(urlencoded({ extended: true, limit: '50mb' }));
     // app.use('/payment/hooks', bodyParser.raw({ type: 'application/json' })); // webhook use rawBody
     // -------------------------------------------
-    useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
 
     // -------------- Global filter/pipes --------------
     app.useGlobalPipes(new ValidationPipe(ValidationConfig));
@@ -66,7 +66,7 @@ async function bootstrap() {
         );
         app.enableCors({
             origin: (origin, callback) => {
-                if (DOMAIN_WHITELIST.indexOf(origin) !== -1) {
+                if (DOMAIN_WHITELIST.indexOf('*') !== -1 || DOMAIN_WHITELIST.indexOf(origin) !== -1) {
                     callback(null, true);
                 } else {
                     callback(
@@ -80,6 +80,10 @@ async function bootstrap() {
             optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
         });
     }
+    // -------------------------------------------
+
+    // -----------------Validator-----------------
+    useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
     // -------------------------------------------
 
     // -----------Setup Redis Adapter-------------
