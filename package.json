@@ -64,7 +64,7 @@
     "mime-types": "^2.1.35",
     "moment": "^2.29.4",
     "nest-commander": "^3.7.1",
-    "nodemailer": "^6.9.3",
+    "nodemailer": "^6.9.7",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
