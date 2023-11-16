@@ -44,7 +44,7 @@
     "@nestjs/throttler": "^4.0.0",
     "@nestjs/typeorm": "^9.0.1",
     "@sentry/node": "^7.54.0",
-    "@sentry/tracing": "^7.54.0",
+    "@sentry/tracing": "^7.80.1",
     "aws-sdk": "^2.1392.0",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
