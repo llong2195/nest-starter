@@ -46,7 +46,7 @@
     "@sentry/node": "^7.54.0",
     "@sentry/tracing": "^7.80.1",
     "aws-sdk": "^2.1392.0",
-    "axios": "^1.4.0",
+    "axios": "^1.6.2",
     "bcrypt": "^5.1.1",
     "bull": "^4.10.4",
     "change-case": "^4.1.2",
