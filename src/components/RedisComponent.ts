@@ -1,15 +1,45 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Redis } from 'ioredis';
-
-import { IORedisKey } from './redis.module';
+import Redis, { RedisOptions } from 'ioredis';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 
 @Injectable()
-export class RedisService {
-    private logger = new Logger(RedisService.name);
-    constructor(@Inject(IORedisKey) private readonly redis: Redis) {
-        this.redis.on('ready', () => {
-            this.logger.log('Redis connected');
-        });
+export default class RedisComponent {
+    static cacheInstance = new Map<number, RedisComponent>();
+    private redis: Redis;
+    private logger = new Logger(RedisComponent.name);
+    constructor(@Optional() redisDb?: number) {
+        const url = process.env.REDIS_URL || '';
+        const useTls = parseInt(process.env.REDIS_TLS || '0') == 1;
+        const host = process.env.REDIS_HOST;
+        const port = parseInt(process.env.REDIS_PORT) || 6379;
+        const password = process.env.REDIS_PASS;
+        const username = process.env.REDIS_USER || '';
+        const db = redisDb ? redisDb : parseInt(process.env.REDIS_DB || '0') || 0;
+        const redisOption: RedisOptions = {
+            host: host,
+            port: port,
+            username: username,
+            password: password,
+            db,
+            tls: useTls ? {} : null,
+        };
+
+        try {
+            this.redis = url ? new Redis(url) : new Redis(redisOption);
+            this.redis.on('ready', () => {
+                this.logger.log('Redis connected');
+            });
+        } catch (error) {
+            this.logger.error(error);
+        }
+    }
+
+    static getInstance(db = 0) {
+        let instance = RedisComponent.cacheInstance.get(db);
+        if (!instance || instance?.getClient()?.status !== 'ready') {
+            instance = new RedisComponent(db);
+            RedisComponent.cacheInstance.set(db, instance);
+        }
+        return instance;
     }
 
     /**

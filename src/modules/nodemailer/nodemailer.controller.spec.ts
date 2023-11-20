@@ -39,7 +39,7 @@ describe('NodemailerController', () => {
                                     strict: true,
                                 },
                             },
-                        } as MailerOptions),
+                        }) as MailerOptions,
                 }),
                 BullModule.registerQueue({
                     name: QUEUE_EMAIL,

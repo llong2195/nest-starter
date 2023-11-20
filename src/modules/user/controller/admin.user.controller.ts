@@ -1,32 +1,16 @@
-import { plainToInstance } from 'class-transformer';
-import { DeleteResult } from 'typeorm';
-
-import {
-    Body,
-    ClassSerializerInterceptor,
-    Controller,
-    Delete,
-    Get,
-    NotFoundException,
-    Param,
-    Patch,
-    Post,
-    Query,
-    UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { DeleteResult } from 'typeorm';
 
 import { BaseResponseDto } from '@base/base.dto';
 import { PaginationOption, PaginationResponse } from '@base/pagination.dto';
 import { UserEntity } from '@entities/user.entity';
-
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserService } from '../user.service';
 
 @ApiTags('/v1/admin/user')
 @ApiBearerAuth()
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller('v1/admin/user')
 export class AdminUserController {
     constructor(private readonly userService: UserService) {}
@@ -34,12 +18,6 @@ export class AdminUserController {
     @Get()
     async index(@Query() filter: PaginationOption): Promise<PaginationResponse<UserEntity>> {
         const data = await this.userService._paginate(filter.page, filter.limit, { deleted: filter.deleted });
-        return new PaginationResponse<UserEntity>(data.body, data.meta);
-    }
-
-    @Get('/inactive')
-    async getInactiveUser(@Query() filter: PaginationOption): Promise<PaginationResponse<UserEntity>> {
-        const data = await this.userService.getInactiveUsers(filter);
         return new PaginationResponse<UserEntity>(data.body, data.meta);
     }
 
@@ -55,13 +33,13 @@ export class AdminUserController {
     @Post()
     async create(@Body() userData: CreateUserDto): Promise<BaseResponseDto<UserEntity>> {
         const createdUser = await this.userService._store(userData);
-        return new BaseResponseDto<UserEntity>(plainToInstance(UserEntity, createdUser));
+        return new BaseResponseDto<UserEntity>(createdUser);
     }
 
     @Patch('/:id')
     async update(@Param('id') id: number, @Body() userData: UpdateUserDto): Promise<BaseResponseDto<UserEntity>> {
-        const createdUser = this.userService._update(id, userData);
-        return new BaseResponseDto<UserEntity>(plainToInstance(UserEntity, createdUser));
+        const updateUser = await this.userService._update(id, userData);
+        return new BaseResponseDto<UserEntity>(updateUser);
     }
 
     @Delete('/:id')
@@ -73,6 +51,6 @@ export class AdminUserController {
     @Post('/:id/restore')
     async restore(@Param('id') id: number): Promise<BaseResponseDto<UserEntity>> {
         const user = await this.userService._restore(id);
-        return new BaseResponseDto<UserEntity>(plainToInstance(UserEntity, user));
+        return new BaseResponseDto<UserEntity>(user);
     }
 }

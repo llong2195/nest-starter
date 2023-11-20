@@ -1,7 +1,5 @@
-import { IsBoolean, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
-
 import { ApiProperty } from '@nestjs/swagger';
-import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
+import { IsBoolean, IsOptional } from 'class-validator';
 
 export class UpdateUserDto {
     @ApiProperty()
@@ -11,18 +9,6 @@ export class UpdateUserDto {
     @ApiProperty()
     @IsOptional()
     lastName: string;
-
-    @ApiProperty()
-    @IsOptional()
-    @IsNotEmpty()
-    @Length(8, 24)
-    password: string;
-
-    @ApiProperty()
-    @IsOptional()
-    @IsNotEmpty()
-    @Validate(PasswordConfirmValidator, ['password'])
-    password_confirmation: string;
 
     @ApiProperty()
     @IsOptional()

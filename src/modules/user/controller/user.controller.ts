@@ -1,29 +1,16 @@
-import { plainToInstance } from 'class-transformer';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
-
-import {
-    Body,
-    ClassSerializerInterceptor,
-    Controller,
-    Get,
-    Patch,
-    Post,
-    UseGuards,
-    UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { BaseResponseDto, CurrentUserDto } from '@base/base.dto';
 import { CurrentUser } from '@decorators/current.user.decorator';
 import { UserEntity } from '@entities/user.entity';
-
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserService } from '../user.service';
 
 @ApiTags('/v1/user')
 @ApiBearerAuth()
-@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard)
 @Controller('v1/user')
 export class UserController {
@@ -32,7 +19,7 @@ export class UserController {
     @Get('/my-profile')
     async myProfile(@CurrentUser() currentUserDto: CurrentUserDto): Promise<BaseResponseDto<UserEntity>> {
         const user = await this.userService.findById(currentUserDto.id);
-        return new BaseResponseDto<UserEntity>(plainToInstance(UserEntity, user));
+        return new BaseResponseDto<UserEntity>(user);
     }
 
     @Patch('/update-profile')
@@ -41,7 +28,7 @@ export class UserController {
         @Body() updateUserDto: UpdateUserDto,
     ): Promise<BaseResponseDto<UserEntity>> {
         const data = await this.userService.updateProfile(currentUserDto.id, updateUserDto);
-        return new BaseResponseDto<UserEntity>(plainToInstance(UserEntity, data));
+        return new BaseResponseDto<UserEntity>(data);
     }
 
     @Post('/change-password')

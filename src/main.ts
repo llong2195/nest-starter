@@ -1,21 +1,18 @@
-import { useContainer } from 'class-validator';
-import { json, urlencoded } from 'express';
-import helmet from 'helmet';
-
 import { ForbiddenException, INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { useContainer } from 'class-validator';
+import { json, urlencoded } from 'express';
+import helmet from 'helmet';
 
 import { ValidationConfig } from '@configs/validation.config';
 import { LoggerService } from '@src/logger/custom.logger';
 import { ValidatorsModule } from '@validators/validators.module';
-
 import { AppModule } from './app.module';
 import { EnvEnum } from './enums/app.enum';
 import { isEnv } from './utils/util';
-// import { runInCluster } from './utils/runInCluster';
 
 // import bodyParser from 'body-parser';
 declare const module: any;

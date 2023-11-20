@@ -37,7 +37,7 @@ import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';
                             strict: true,
                         },
                     },
-                } as MailerOptions),
+                }) as MailerOptions,
         }),
         BullModule.registerQueue({
             name: QUEUE_EMAIL,

@@ -23,7 +23,10 @@ export class TemplateRepository extends Repository<UserEntity> {
  **/
 @Injectable()
 export class Template2Repository extends Repository<UserEntity> {
-    constructor(private readonly dataSource: DataSource, manager?: EntityManager) {
+    constructor(
+        private readonly dataSource: DataSource,
+        manager?: EntityManager,
+    ) {
         let sManager;
         let sQueryRunner;
         if (manager && manager != undefined && manager != null) {

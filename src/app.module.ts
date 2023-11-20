@@ -1,17 +1,14 @@
-import { join } from 'path';
-
 import { HttpModule } from '@nestjs/axios';
-import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
-import { MiddlewareConsumer, Module, NestModule, Provider } from '@nestjs/common';
+import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
+import { join } from 'node:path';
 
-import { appConfig, authConfig, databaseConfig } from '@configs/index';
 import { EnvEnum } from '@enums/index';
 import { AuthModule } from '@modules/auth/auth.module';
-import { CommanderModule } from '@modules/commander/commander.module';
 import { CronModule } from '@modules/cron/cron.module';
 import { FileModule } from '@modules/file/file.module';
 import { NodemailerModule } from '@modules/nodemailer/nodemailer.module';
@@ -21,7 +18,6 @@ import { SettingModule } from '@modules/setting/setting.module';
 import { UserModule } from '@modules/user/user.module';
 import { isEnv } from '@utils/index';
 import { ValidatorsModule } from '@validators/validators.module';
-
 import { AppController } from './app.controller';
 import { DatabaseModule } from './database/database.module';
 import { AllExceptionFilter } from './filter/exception.filter';
@@ -29,10 +25,11 @@ import { ThrottlerBehindProxyGuard } from './guard/throttler-behind-proxy.guard'
 import { I18nModule } from './i18n/i18n.module';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
+import { IORedisModule, IRedisModuleOptions } from './libs';
 import { LoggerModule } from './logger/logger.module';
-import { DevtoolsModule } from '@nestjs/devtools-integration';
 
 const providers = [] as Provider[];
+const modules = [] as DynamicModule[];
 
 if (isEnv(EnvEnum.Production)) {
     providers.push({
@@ -44,22 +41,22 @@ if (isEnv(EnvEnum.Production)) {
         provide: APP_INTERCEPTOR,
         useClass: LoggingInterceptor,
     });
+    modules.push(
+        DevtoolsModule.registerAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: (config: ConfigService) => ({
+                http: config.get<string>('NODE_ENV') !== EnvEnum.Production,
+                port: config.get<number>('PORT'),
+            }),
+        }),
+    );
 }
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: ['.env'],
-            load: [appConfig, databaseConfig, authConfig],
-        }),
-
-        DevtoolsModule.registerAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (config: ConfigService) => ({
-                http: config.get<string>('NODE_ENV') !== EnvEnum.Production,
-                port: config.get<number>('port'),
-            }),
         }),
 
         ServeStaticModule.forRoot({
@@ -73,25 +70,22 @@ if (isEnv(EnvEnum.Production)) {
             inject: [ConfigService],
             useFactory: (config: ConfigService) =>
                 ({
-                    ttl: config.get<number>('THROTTLE_TTL'),
-                    limit: config.get<number>('THROTTLE_LIMIT'),
-                } as ThrottlerModuleOptions),
-        }),
+                    throttlers: [
+                        {
+                            ttl: config.get<number>('THROTTLE_TTL'),
+                            limit: config.get<number>('THROTTLE_LIMIT'),
+                        },
+                    ],
+                    ignoreUserAgents: [
+                        // Don't throttle request that have 'googlebot' defined in them.
+                        // Example user agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+                        /googlebot/gi,
 
-        BullModule.forRootAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (config: ConfigService) =>
-                ({
-                    redis: {
-                        host: config.get<string>('REDIS_HOST'),
-                        port: config.get<number>('REDIS_PORT'),
-                    },
-                    defaultJobOptions: {
-                        removeOnComplete: true,
-                        attempts: 10,
-                    },
-                } as BullRootModuleOptions),
+                        // Don't throttle request that have 'bingbot' defined in them.
+                        // Example user agent: Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)
+                        new RegExp('bingbot', 'gi'),
+                    ],
+                }) as ThrottlerModuleOptions,
         }),
 
         HttpModule.registerAsync({
@@ -114,29 +108,23 @@ if (isEnv(EnvEnum.Production)) {
         FileModule,
         NodemailerModule,
         QueueModule,
-        CommanderModule,
         QrCodeModule,
-        // IORedisModule.registerAsync({
-        //     imports: [ConfigModule],
-        //     useFactory: async (configService: ConfigService): Promise<IRedisModuleOptions> => {
-        //         return {
-        //             connectionOptions: {
-        //                 host: configService.get('REDIS_HOST'),
-        //                 port: configService.get('REDIS_PORT'),
-        //                 password: configService.get('REDIS_PASS'),
-        //             },
-        //             onClientReady: (client: Redis) => {
-        //                 client.on('connect', () => {
-        //                     LoggerService.log(
-        //                         `Connected to redis on ${client.options.host}:${client.options.port}`,
-        //                         IORedisModule.name,
-        //                     );
-        //                 });
-        //             },
-        //         };
-        //     },
-        //     inject: [ConfigService],
-        // }),
+        IORedisModule.registerAsync({
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService): Promise<IRedisModuleOptions> => {
+                return {
+                    connectionOptions: {
+                        host: configService.get<string>('REDIS_HOST'),
+                        port: configService.get<number>('REDIS_PORT'),
+                        username: configService.get<string>('REDIS_USERNAME'),
+                        password: configService.get<string>('REDIS_PASSWORD'),
+                    },
+                };
+            },
+            inject: [ConfigService],
+        }),
+
+        ...modules,
     ],
     controllers: [AppController],
     providers: [
@@ -151,11 +139,4 @@ if (isEnv(EnvEnum.Production)) {
         ...providers,
     ],
 })
-export class AppModule implements NestModule {
-    configure(consumer: MiddlewareConsumer): void {
-        // consumer.apply(RawBodyMiddleware).forRoutes({
-        //     path: 'webhook/stripe',
-        //     method: RequestMethod.POST,
-        // });
-    }
-}
+export class AppModule {}

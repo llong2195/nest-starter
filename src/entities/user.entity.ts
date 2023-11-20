@@ -1,10 +1,10 @@
 import { Expose } from 'class-transformer';
-import { DateAudit } from 'src/base/date_audit.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-import { RoleEnum } from '@src/enums/role.enum';
+import { DateAudit } from '@base/date_audit.entity';
+import { RoleEnum } from '@enums/role.enum';
 
-// @Index()
+@Index('idx_email', ['email'], { unique: true })
 @Entity({ name: 'user' })
 export class UserEntity extends DateAudit {
     @PrimaryGeneratedColumn({ type: 'bigint' })
@@ -22,7 +22,6 @@ export class UserEntity extends DateAudit {
     @Column({ name: 'last_name', type: 'varchar', nullable: true })
     lastName: string;
 
-    // @Exclude()
     @Column({ name: 'password', type: 'varchar', nullable: true })
     password: string;
 

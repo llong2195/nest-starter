@@ -1,7 +1,6 @@
+import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm';
-
-import { ConfigService } from '@nestjs/config';
 
 import { UserEntity } from '@entities/user.entity';
 
@@ -9,9 +8,12 @@ import { UserEntity } from '@entities/user.entity';
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
     private readonly bcryptSalt: number;
 
-    constructor(dataSource: DataSource, private readonly configService: ConfigService) {
+    constructor(
+        dataSource: DataSource,
+        private readonly configService: ConfigService,
+    ) {
         dataSource.subscribers.push(this);
-        this.bcryptSalt = configService.get<number>('bcryptSalt');
+        this.bcryptSalt = configService.get<number>('BCRYPT_SALT');
     }
 
     listenTo() {
@@ -21,14 +23,14 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
     async beforeInsert(event: InsertEvent<UserEntity>): Promise<void> {
         const { password } = event.entity;
         if (password) {
-            event.entity.password = await bcrypt.hash(password, this.bcryptSalt);
+            event.entity.password = await bcrypt.hash(password, Number(this.bcryptSalt));
         }
     }
 
     async beforeUpdate(event: UpdateEvent<UserEntity>): Promise<void> {
         const { password } = event.entity;
         if (password) {
-            event.entity.password = await bcrypt.hash(password, this.bcryptSalt);
+            event.entity.password = await bcrypt.hash(password, Number(this.bcryptSalt));
         }
     }
 }

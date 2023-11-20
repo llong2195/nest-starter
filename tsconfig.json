@@ -20,21 +20,59 @@
         "forceConsistentCasingInFileNames": false,
         "noFallthroughCasesInSwitch": false,
         "paths": {
-            "@configs/*": ["src/configs/*"],
-            "@base/*": ["src/base/*"],
-            "@validators/*": ["src/validators/*"],
-            "@modules/*": ["src/modules/*"],
-            "@exceptions/*": ["src/exceptions/*"],
-            "@decorators/*": ["src/decorators/*"],
-            "@enums/*": ["src/enums/*"],
-            "@constants/*": ["src/constants/*"],
-            "@entities/*": ["src/entities/*"],
-            "@guard/*": ["src/guard/*"],
-            "@utils/*": ["src/utils/*"],
-            "@libs/*": ["src/libs/*"],
-            "@src/*": ["src/*"]
+            "@configs/*": [
+                "src/configs/*"
+            ],
+            "@base/*": [
+                "src/base/*"
+            ],
+            "@validators/*": [
+                "src/validators/*"
+            ],
+            "@modules/*": [
+                "src/modules/*"
+            ],
+            "@logger/*": [
+                "src/logger/*"
+            ],
+            "@exceptions/*": [
+                "src/exceptions/*"
+            ],
+            "@decorators/*": [
+                "src/decorators/*"
+            ],
+            "@enums/*": [
+                "src/enums/*"
+            ],
+            "@constants/*": [
+                "src/constants/*"
+            ],
+            "@entities/*": [
+                "src/entities/*"
+            ],
+            "@guard/*": [
+                "src/guard/*"
+            ],
+            "@utils/*": [
+                "src/utils/*"
+            ],
+            "@i18n/*": [
+                "src/i18n/*"
+            ],
+            "@libs/*": [
+                "src/libs/*"
+            ],
+            "@src/*": [
+                "src/*"
+            ]
         }
     },
-    "include": [".eslintrc.js", "src/**/*", "test/**/*"],
-    "exclude": ["node_modules"]
+    "include": [
+        ".eslintrc.js",
+        "src/**/*",
+        "test/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }

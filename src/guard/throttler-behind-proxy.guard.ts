@@ -3,7 +3,10 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Injectable()
 export class ThrottlerBehindProxyGuard extends ThrottlerGuard {
-    protected getTracker(req: Record<string, any>): string {
-        return req.ips.length ? req.ips[0] : req.ip; // individualize IP extraction to meet your own needs
+    protected getTracker(request: Record<string, any>): Promise<string> {
+        return new Promise<string>(resolve => {
+            const tracker = request.ips.length > 0 ? request.ips[0] : request.ip; // individualize IP extraction to meet your own needs
+            resolve(tracker);
+        });
     }
 }

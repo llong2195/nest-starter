@@ -17,7 +17,11 @@ import { isDev } from '@utils/util';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-    constructor(private logger: LoggerService, private readonly configService: ConfigService) {
+    constructor(
+        private logger: LoggerService,
+        private readonly configService: ConfigService,
+        private i18n: I18nService,
+    ) {
         Sentry.init({
             dsn: SENTRY_DSN,
             normalizeDepth: 10,
@@ -30,7 +34,6 @@ export class AllExceptionFilter implements ExceptionFilter {
         response: Response,
         exception: HttpException | QueryFailedError | Error,
     ): void {
-        const i18nService = new I18nService(request);
         let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         let errorCode = ErrorCode.UNKNOWN;
         let message = 'Internal server error';
@@ -87,7 +90,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         if (Array.isArray(responseBody.message)) {
             responseBody.message = responseBody.message[0];
         }
-        if (responseBody.message) responseBody.message = i18nService.t(responseBody.message as string);
+        if (responseBody.message) responseBody.message = this.i18n.lang(responseBody.message as string);
         response.status(statusCode).send(responseBody);
         this.handleMessage(exception, request, responseBody);
     }
@@ -124,7 +127,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         const { body, headers, ip, method, params, query } = request;
         const user = (request as unknown as Record<string, string>)?.user;
         Sentry.setTag('ip', JSON.stringify(request.headers['X-FORWARDED-FOR']) + ',' + request.ip);
-        Sentry.setTag('queryquery', JSON.stringify(request.query));
+        Sentry.setTag('query', JSON.stringify(request.query));
         Sentry.setTag('method', request.method);
 
         Sentry.setExtra('body', request.body);

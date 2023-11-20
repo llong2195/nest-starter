@@ -9,7 +9,10 @@ export const QUEUE_EMAIL = 'QUEUE_EMAIL';
 export const QUEUE_EMAIL_SENDMAIL = 'QUEUE_EMAIL_SENDMAIL';
 @Injectable()
 export class NodemailerService {
-    constructor(private readonly mailerService: MailerService, @InjectQueue(QUEUE_EMAIL) private queueMail: Queue) {}
+    constructor(
+        private readonly mailerService: MailerService,
+        @InjectQueue(QUEUE_EMAIL) private queueMail: Queue,
+    ) {}
 
     public async example(): Promise<void> {
         this.mailerService

@@ -1,4 +1,4 @@
-import { camelCase } from 'change-case';
+import camelCase from 'lodash.camelcase';
 import CryptoJS from 'crypto-js';
 import moment from 'moment';
 import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';

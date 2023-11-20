@@ -6,7 +6,10 @@ import { FileEntity } from '@entities/file.entity';
 
 @Injectable()
 export class FileRepository extends Repository<FileEntity> {
-    constructor(private readonly dataSource: DataSource, @Optional() manager?: EntityManager) {
+    constructor(
+        private readonly dataSource: DataSource,
+        @Optional() manager?: EntityManager,
+    ) {
         let sManager;
         let sQueryRunner;
         if (manager && manager != undefined && manager != null) {
