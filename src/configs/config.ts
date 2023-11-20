@@ -1,6 +1,6 @@
-import * as dotenv from 'dotenv';
+import { config } from 'dotenv';
 
-dotenv.config();
+config();
 
 // App
 export const NODE_ENV = process.env.NODE_ENV || 'development';
