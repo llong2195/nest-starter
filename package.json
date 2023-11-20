@@ -22,9 +22,7 @@
     "typeorm:create": "npm run typeorm -- migration:create",
     "typeorm:up": "npm run typeorm -- --dataSource=./data-source.ts migration:run",
     "typeorm:down": "npm run typeorm -- --dataSource=./data-source.ts migration:revert",
-    "typeorm:show": "npm run typeorm -- --dataSource=./data-source.ts migration:show",
-    "commander": "ts-node -r tsconfig-paths/register ./src/commander.ts",
-    "seed:user": "npm run commander seed:user"
+    "typeorm:show": "npm run typeorm -- --dataSource=./data-source.ts migration:show"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.9.1",
