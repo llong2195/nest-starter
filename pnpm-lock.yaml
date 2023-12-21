@@ -57,8 +57,8 @@ dependencies:
     specifier: ^7.89.0
     version: 7.89.0
   '@sentry/tracing':
-    specifier: ^7.88.0
-    version: 7.88.0
+    specifier: ^7.90.0
+    version: 7.90.0
   aws-sdk:
     specifier: ^2.1522.0
     version: 2.1522.0
@@ -1526,15 +1526,6 @@ packages:
       selderee: 0.11.0
     dev: false
 
-  /@sentry-internal/tracing@7.88.0:
-    resolution: {integrity: sha512-xXQdcYhsS+ourzJHjXNjZC9zakuc97udmpgaXRjEP7FjPYclIx+YXwgFBdHM2kzAwZLFOsEce5dr46GVXUDfZw==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@sentry/core': 7.88.0
-      '@sentry/types': 7.88.0
-      '@sentry/utils': 7.88.0
-    dev: false
-
   /@sentry-internal/tracing@7.89.0:
     resolution: {integrity: sha512-cSwno2NYteBBqOvcm/ue9cJxGGl2uffG4laEyLR9y4we+bYxigfx/Ki2TFOtwXrv5o59eRAtN1lpzaAf43yfBw==}
     engines: {node: '>=8'}
@@ -1544,12 +1535,13 @@ packages:
       '@sentry/utils': 7.89.0
     dev: false
 
-  /@sentry/core@7.88.0:
-    resolution: {integrity: sha512-Jzbb7dcwiCO7kI0a1w+32UzWxbEn2OcZWzp55QMEeAh6nZ/5CXhXwpuHi0tW7doPj+cJdmxMTMu9LqMVfdGkzQ==}
+  /@sentry-internal/tracing@7.90.0:
+    resolution: {integrity: sha512-74jEtpdio9aRkiVBcrY1ZJXek0oFMqxDJK6BkJNCA+aUK1z96V9viehANRk3Nbxm01rWjmH1U4e1siuo9FhjuQ==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.88.0
-      '@sentry/utils': 7.88.0
+      '@sentry/core': 7.90.0
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
     dev: false
 
   /@sentry/core@7.89.0:
@@ -1558,6 +1550,14 @@ packages:
     dependencies:
       '@sentry/types': 7.89.0
       '@sentry/utils': 7.89.0
+    dev: false
+
+  /@sentry/core@7.90.0:
+    resolution: {integrity: sha512-HolpdHjULCwehKPWHR6IPQM0NBjmORhlBU7FtCh/e8TtSkZ9ztPsuofNBomMS1+mdbL+yxOIc9KUYEl0zRfeAQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
     dev: false
 
   /@sentry/node@7.89.0:
@@ -1573,16 +1573,11 @@ packages:
       - supports-color
     dev: false
 
-  /@sentry/tracing@7.88.0:
-    resolution: {integrity: sha512-Lj4hhLraalN4w3swXkP2do1hcaQVOuLvO6eJJbcwf10b+P4CcdlwAnqvxOOCNxA5VzG4/K2BqQ8LRU4S0Ulj9A==}
+  /@sentry/tracing@7.90.0:
+    resolution: {integrity: sha512-7NeLePk/MaL/VzAJ+uF/ic1dA+3nefeHwKdUtDDxbbz72T3uTfPCfXuiZeSara9ykop3kKWc4Ll5JTSi8LbA0Q==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry-internal/tracing': 7.88.0
-    dev: false
-
-  /@sentry/types@7.88.0:
-    resolution: {integrity: sha512-FvwvmX1pWAZKicPj4EpKyho8Wm+C4+r5LiepbbBF8oKwSPJdD2QV1fo/LWxsrzNxWOllFIVIXF5Ed3nPYQWpTw==}
-    engines: {node: '>=8'}
+      '@sentry-internal/tracing': 7.90.0
     dev: false
 
   /@sentry/types@7.89.0:
@@ -1590,11 +1585,9 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /@sentry/utils@7.88.0:
-    resolution: {integrity: sha512-ukminfRmdBXTzk49orwJf3Lu3hR60ZRHjE2a4IXwYhyDT6JJgJqgsq1hzGXx0AyFfyS4WhfZ6QUBy7fu3BScZQ==}
+  /@sentry/types@7.90.0:
+    resolution: {integrity: sha512-dA0Mtba5jYlcQ6xBsGILZuFq4NGrWLfr2ys036z2JE4H1+3PxOVERlD3Di7p+WKYM5gjFw10Hn3EgUV979E3dA==}
     engines: {node: '>=8'}
-    dependencies:
-      '@sentry/types': 7.88.0
     dev: false
 
   /@sentry/utils@7.89.0:
@@ -1602,6 +1595,13 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       '@sentry/types': 7.89.0
+    dev: false
+
+  /@sentry/utils@7.90.0:
+    resolution: {integrity: sha512-6BpqAzONm/HQbdlL4TY2W2vBSmaG/eVvwUaHoz0wB49EkWwpF6j/SO9Kb/XkiA/qp9GoJVXpnGBFQLPx7kv/Yw==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.90.0
     dev: false
 
   /@sinclair/typebox@0.27.8:
