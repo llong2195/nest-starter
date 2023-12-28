@@ -78,8 +78,8 @@ dependencies:
     specifier: ^0.14.0
     version: 0.14.0
   cloudinary:
-    specifier: ^1.41.0
-    version: 1.41.0
+    specifier: ^1.41.1
+    version: 1.41.1
   content-disposition:
     specifier: ^0.5.4
     version: 0.5.4
@@ -2877,8 +2877,8 @@ packages:
       lodash: 4.17.21
     dev: false
 
-  /cloudinary@1.41.0:
-    resolution: {integrity: sha512-qFf2McjvILJITePf4VF1PrY/8c2zy+/q5FVV6V3VWrP/gpIZsusPqXL4QZ6ZKXibPRukzMYqsQEhaSQgJHKKow==}
+  /cloudinary@1.41.1:
+    resolution: {integrity: sha512-EBNEmhSNtES8d9dAd1tg9mKJk2jB5LvRxDcgNk7JiMDWNeHkSpwroJwnHZN4XdxKvjLnj9a9pbOgdPW90GkG1g==}
     engines: {node: '>=0.6'}
     dependencies:
       cloudinary-core: 2.13.0(lodash@4.17.21)
