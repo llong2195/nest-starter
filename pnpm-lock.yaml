@@ -60,8 +60,8 @@ dependencies:
     specifier: ^7.91.0
     version: 7.91.0
   aws-sdk:
-    specifier: ^2.1528.0
-    version: 2.1528.0
+    specifier: ^2.1531.0
+    version: 2.1531.0
   axios:
     specifier: ^1.6.4
     version: 1.6.4
@@ -2312,8 +2312,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: false
 
-  /aws-sdk@2.1528.0:
-    resolution: {integrity: sha512-QyV8fTJJAqnBAbAGkRKgXfI/NvxAoeJHjEFVXDo77hv13cJZKOdBTe9dV56ztS4R1twDJxHibXdDi7IeBrag2w==}
+  /aws-sdk@2.1531.0:
+    resolution: {integrity: sha512-BnZcutxV8aplvyCQDUxOlHkrqqqmWl1hgY1sq8umP6bcSEknjH+mrBB6e0XyLQY4ParC0Oyw/8IbDWwc+LsDqw==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       buffer: 4.9.2
