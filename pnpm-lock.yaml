@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@nestjs-modules/mailer':
     specifier: ^1.11.2
-    version: 1.11.2(@nestjs/common@10.3.3)(@nestjs/core@10.3.3)(nodemailer@6.9.11)
+    version: 1.11.2(@nestjs/common@10.3.3)(@nestjs/core@10.3.3)(nodemailer@6.9.12)
   '@nestjs/axios':
     specifier: ^3.0.2
     version: 3.0.2(@nestjs/common@10.3.3)(axios@1.6.7)(rxjs@7.8.1)
@@ -117,8 +117,8 @@ dependencies:
     specifier: ^2.30.1
     version: 2.30.1
   nodemailer:
-    specifier: ^6.9.11
-    version: 6.9.11
+    specifier: ^6.9.12
+    version: 6.9.12
   passport:
     specifier: ^0.7.0
     version: 0.7.0
@@ -1148,7 +1148,7 @@ packages:
     dev: false
     optional: true
 
-  /@nestjs-modules/mailer@1.11.2(@nestjs/common@10.3.3)(@nestjs/core@10.3.3)(nodemailer@6.9.11):
+  /@nestjs-modules/mailer@1.11.2(@nestjs/common@10.3.3)(@nestjs/core@10.3.3)(nodemailer@6.9.12):
     resolution: {integrity: sha512-k07wyKbtCzxWMm6IqGwcGIisnXD/6sneGvUR8rBBZbxtLn1HE1FLGyiaXBrPui/0K7W41aS9x9jAIhfTawtlUg==}
     peerDependencies:
       '@nestjs/common': '>=7.0.9'
@@ -1160,7 +1160,7 @@ packages:
       '@nestjs/core': 10.3.3(@nestjs/common@10.3.3)(@nestjs/platform-express@10.3.3)(reflect-metadata@0.2.1)(rxjs@7.8.1)
       glob: 10.3.10
       mjml: 4.15.3
-      nodemailer: 6.9.11
+      nodemailer: 6.9.12
       preview-email: 3.0.19
     optionalDependencies:
       '@types/ejs': 3.1.5
@@ -6174,8 +6174,8 @@ packages:
     resolution: {integrity: sha512-uYr7J37ae/ORWdZeQ1xxMJe3NtdmqMC/JZK+geofDrkLUApKRHPd18/TxtBOJ4A0/+uUIliorNrfYV6s1b02eQ==}
     dev: true
 
-  /nodemailer@6.9.11:
-    resolution: {integrity: sha512-UiAkgiERuG94kl/3bKfE8o10epvDnl0vokNEtZDPTq9BWzIl6EFT9336SbIT4oaTBD8NmmUTLsQyXHV82eXSWg==}
+  /nodemailer@6.9.12:
+    resolution: {integrity: sha512-pnLo7g37Br3jXbF0bl5DekBJihm2q+3bB3l2o/B060sWmb5l+VqeScAQCBqaQ+5ezRZFzW5SciZNGdRDEbq89w==}
     engines: {node: '>=6.0.0'}
     dev: false
 
@@ -6677,7 +6677,7 @@ packages:
       fixpack: 4.0.0
       get-port: 5.1.1
       mailparser: 3.6.5
-      nodemailer: 6.9.11
+      nodemailer: 6.9.12
       open: 7.4.2
       p-event: 4.2.0
       p-wait-for: 3.2.0
