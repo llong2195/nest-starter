@@ -43,7 +43,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "@sentry/node": "^7.107.0",
     "@sentry/tracing": "^7.105.0",
-    "aws-sdk": "^2.1569.0",
+    "aws-sdk": "^2.1578.0",
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "bull": "^4.12.2",
