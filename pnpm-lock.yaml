@@ -10,7 +10,7 @@ dependencies:
     version: 1.11.2(@nestjs/common@10.3.3)(@nestjs/core@10.3.4)(nodemailer@6.9.12)
   '@nestjs/axios':
     specifier: ^3.0.2
-    version: 3.0.2(@nestjs/common@10.3.3)(axios@1.6.7)(rxjs@7.8.1)
+    version: 3.0.2(@nestjs/common@10.3.3)(axios@1.6.8)(rxjs@7.8.1)
   '@nestjs/bull':
     specifier: ^10.1.0
     version: 10.1.0(@nestjs/common@10.3.3)(@nestjs/core@10.3.4)(bull@4.12.2)
@@ -63,8 +63,8 @@ dependencies:
     specifier: ^2.1579.0
     version: 2.1579.0
   axios:
-    specifier: ^1.6.7
-    version: 1.6.7
+    specifier: ^1.6.8
+    version: 1.6.8
   bcrypt:
     specifier: ^5.1.1
     version: 5.1.1
@@ -1172,7 +1172,7 @@ packages:
       - encoding
     dev: false
 
-  /@nestjs/axios@3.0.2(@nestjs/common@10.3.3)(axios@1.6.7)(rxjs@7.8.1):
+  /@nestjs/axios@3.0.2(@nestjs/common@10.3.3)(axios@1.6.8)(rxjs@7.8.1):
     resolution: {integrity: sha512-Z6GuOUdNQjP7FX+OuV2Ybyamse+/e0BFdTWBX5JxpBDKA+YkdLynDgG6HTF04zy6e9zPa19UX0WA2VDoehwhXQ==}
     peerDependencies:
       '@nestjs/common': ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
@@ -1180,7 +1180,7 @@ packages:
       rxjs: ^6.0.0 || ^7.0.0
     dependencies:
       '@nestjs/common': 10.3.3(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
-      axios: 1.6.7
+      axios: 1.6.8
       rxjs: 7.8.1
     dev: false
 
@@ -2458,10 +2458,10 @@ packages:
       xml2js: 0.6.2
     dev: false
 
-  /axios@1.6.7:
-    resolution: {integrity: sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==}
+  /axios@1.6.8:
+    resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
     dependencies:
-      follow-redirects: 1.15.4
+      follow-redirects: 1.15.6
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -3989,8 +3989,8 @@ packages:
     resolution: {integrity: sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==}
     dev: true
 
-  /follow-redirects@1.15.4:
-    resolution: {integrity: sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==}
+  /follow-redirects@1.15.6:
+    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
