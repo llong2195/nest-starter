@@ -102,8 +102,8 @@ dependencies:
     specifier: ^7.1.0
     version: 7.1.0
   ioredis:
-    specifier: ^5.3.2
-    version: 5.3.2
+    specifier: ^5.4.0
+    version: 5.4.0
   jsonwebtoken:
     specifier: ^9.0.2
     version: 9.0.2
@@ -145,7 +145,7 @@ dependencies:
     version: 1.6.6
   typeorm:
     specifier: ^0.3.20
-    version: 0.3.20(ioredis@5.3.2)(pg@8.11.5)(ts-node@10.9.2)
+    version: 0.3.20(ioredis@5.4.0)(pg@8.11.5)(ts-node@10.9.2)
 
 devDependencies:
   '@nestjs/cli':
@@ -1522,7 +1522,7 @@ packages:
       '@nestjs/core': 10.3.7(@nestjs/common@10.3.7)(@nestjs/platform-express@10.3.7)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       reflect-metadata: 0.2.2
       rxjs: 7.8.1
-      typeorm: 0.3.20(ioredis@5.3.2)(pg@8.11.5)(ts-node@10.9.2)
+      typeorm: 0.3.20(ioredis@5.4.0)(pg@8.11.5)(ts-node@10.9.2)
       uuid: 9.0.1
     dev: false
 
@@ -2690,7 +2690,7 @@ packages:
     dependencies:
       cron-parser: 4.9.0
       get-port: 5.1.1
-      ioredis: 5.3.2
+      ioredis: 5.4.0
       lodash: 4.17.21
       msgpackr: 1.10.1
       semver: 7.5.4
@@ -4479,8 +4479,8 @@ packages:
     engines: {node: '>= 0.10'}
     dev: true
 
-  /ioredis@5.3.2:
-    resolution: {integrity: sha512-1DKMMzlIHM02eBBVOFQ1+AolGjs6+xEcM4PDL7NqOS6szq7H9jSaEkIUH6/a5Hl241LzW6JLSiAbNvTQjUupUA==}
+  /ioredis@5.4.0:
+    resolution: {integrity: sha512-lGiiZyWFOskPu3pH4P8+uicHOZHpzYpgfKZFre68wLK6059zBo+KDTQpwxAVibBajKqpcrRJ5k+jl/uNHcCo3A==}
     engines: {node: '>=12.22.0'}
     dependencies:
       '@ioredis/commands': 1.2.0
@@ -7702,7 +7702,7 @@ packages:
   /typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
-  /typeorm@0.3.20(ioredis@5.3.2)(pg@8.11.5)(ts-node@10.9.2):
+  /typeorm@0.3.20(ioredis@5.4.0)(pg@8.11.5)(ts-node@10.9.2):
     resolution: {integrity: sha512-sJ0T08dV5eoZroaq9uPKBoNcGslHBR4E4y+EBHs//SiGbblGe7IeduP/IH4ddCcj0qp3PHwDwGnuvqEAnKlq/Q==}
     engines: {node: '>=16.13.0'}
     hasBin: true
@@ -7769,7 +7769,7 @@ packages:
       debug: 4.3.4
       dotenv: 16.4.5
       glob: 10.3.10
-      ioredis: 5.3.2
+      ioredis: 5.4.0
       mkdirp: 2.1.6
       pg: 8.11.5
       reflect-metadata: 0.2.2
