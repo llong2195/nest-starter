@@ -25,7 +25,7 @@
     "typeorm:show": "npm run typeorm -- --dataSource=./data-source.ts migration:show"
   },
   "dependencies": {
-    "@nestjs-modules/mailer": "^1.11.2",
+    "@nestjs-modules/mailer": "^2.0.0",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/bull": "^10.1.1",
     "@nestjs/common": "^10.3.8",
