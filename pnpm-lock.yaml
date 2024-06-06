@@ -126,8 +126,8 @@ dependencies:
     specifier: ^4.0.1
     version: 4.0.1
   pg:
-    specifier: ^8.11.5
-    version: 8.11.5
+    specifier: ^8.12.0
+    version: 8.12.0
   qrcode:
     specifier: ^1.5.3
     version: 1.5.3
@@ -145,7 +145,7 @@ dependencies:
     version: 1.6.6
   typeorm:
     specifier: ^0.3.20
-    version: 0.3.20(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2)
+    version: 0.3.20(ioredis@5.4.1)(pg@8.12.0)(ts-node@10.9.2)
 
 devDependencies:
   '@nestjs/cli':
@@ -1540,7 +1540,7 @@ packages:
       '@nestjs/core': 10.3.8(@nestjs/common@10.3.8)(@nestjs/platform-express@10.3.9)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       reflect-metadata: 0.2.2
       rxjs: 7.8.1
-      typeorm: 0.3.20(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2)
+      typeorm: 0.3.20(ioredis@5.4.1)(pg@8.12.0)(ts-node@10.9.2)
       uuid: 9.0.1
     dev: false
 
@@ -7198,12 +7198,12 @@ packages:
     engines: {node: '>=4.0.0'}
     dev: false
 
-  /pg-pool@3.6.2(pg@8.11.5):
+  /pg-pool@3.6.2(pg@8.12.0):
     resolution: {integrity: sha512-Htjbg8BlwXqSBQ9V8Vjtc+vzf/6fVUuak/3/XXKA9oxZprwW3IMDQTGHP+KDmVL7rtd+R1QjbnCFPuTHm3G4hg==}
     peerDependencies:
       pg: '>=8.0'
     dependencies:
-      pg: 8.11.5
+      pg: 8.12.0
     dev: false
 
   /pg-protocol@1.6.1:
@@ -7221,8 +7221,8 @@ packages:
       postgres-interval: 1.2.0
     dev: false
 
-  /pg@8.11.5:
-    resolution: {integrity: sha512-jqgNHSKL5cbDjFlHyYsCXmQDrfIX/3RsNwYqpd4N0Kt8niLuNoRNH+aazv6cOd43gPh9Y4DjQCtb+X0MH0Hvnw==}
+  /pg@8.12.0:
+    resolution: {integrity: sha512-A+LHUSnwnxrnL/tZ+OLfqR1SxLN3c/pgDztZ47Rpbsd4jUytsTtwQo/TLPRzPJMp/1pbhYVhH9cuSZLAajNfjQ==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
       pg-native: '>=3.0.1'
@@ -7231,7 +7231,7 @@ packages:
         optional: true
     dependencies:
       pg-connection-string: 2.6.4
-      pg-pool: 3.6.2(pg@8.11.5)
+      pg-pool: 3.6.2(pg@8.12.0)
       pg-protocol: 1.6.1
       pg-types: 2.2.0
       pgpass: 1.0.5
@@ -8462,7 +8462,7 @@ packages:
   /typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
-  /typeorm@0.3.20(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2):
+  /typeorm@0.3.20(ioredis@5.4.1)(pg@8.12.0)(ts-node@10.9.2):
     resolution: {integrity: sha512-sJ0T08dV5eoZroaq9uPKBoNcGslHBR4E4y+EBHs//SiGbblGe7IeduP/IH4ddCcj0qp3PHwDwGnuvqEAnKlq/Q==}
     engines: {node: '>=16.13.0'}
     hasBin: true
@@ -8531,7 +8531,7 @@ packages:
       glob: 10.3.15
       ioredis: 5.4.1
       mkdirp: 2.1.6
-      pg: 8.11.5
+      pg: 8.12.0
       reflect-metadata: 0.2.2
       sha.js: 2.4.11
       ts-node: 10.9.2(@types/node@20.14.2)(typescript@5.4.5)
