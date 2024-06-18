@@ -39,7 +39,7 @@
     "@nestjs/schedule": "^4.0.2",
     "@nestjs/serve-static": "^4.0.2",
     "@nestjs/swagger": "^7.3.1",
-    "@nestjs/throttler": "^5.1.2",
+    "@nestjs/throttler": "^5.2.0",
     "@nestjs/typeorm": "^10.0.2",
     "@sentry/node": "^8.7.0",
     "@sentry/tracing": "^7.112.2",
