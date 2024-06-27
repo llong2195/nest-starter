@@ -1,4 +1,4 @@
-FROM node:20.12.2-slim AS builder
+FROM node:20.15-bookworm-slim AS builder
 
 WORKDIR /usr/src/app
 
@@ -12,7 +12,7 @@ RUN rm -rf dist
 
 RUN npm run build
 
-FROM node:20.12.2-slim
+FROM node:20.15-bookworm-slim
 
 WORKDIR /usr/src/app
 
