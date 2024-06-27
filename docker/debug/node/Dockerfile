@@ -1,4 +1,4 @@
-FROM node:20.13.1-buster-slim
+FROM node:20.15-bookworm-slim
 
 WORKDIR /usr/src/app
 
