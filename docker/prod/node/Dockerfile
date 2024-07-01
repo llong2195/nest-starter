@@ -1,4 +1,4 @@
-FROM node:20.15-bookworm-slim AS builder
+FROM node:20.15-alpine AS builder
 
 WORKDIR /usr/src/app
 
