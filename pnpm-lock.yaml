@@ -81,8 +81,8 @@ importers:
         specifier: ^0.14.1
         version: 0.14.1
       cloudinary:
-        specifier: ^2.2.0
-        version: 2.2.0
+        specifier: ^2.3.0
+        version: 2.3.0
       content-disposition:
         specifier: ^0.5.4
         version: 0.5.4
@@ -1795,8 +1795,8 @@ packages:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
 
-  cloudinary@2.2.0:
-    resolution: {integrity: sha512-akbLTZcNegGSkl07Frnt9fyiK9KZ2zPS+a+j7uLrjNYxVhDpDdIBz9G6snPCYqgk+WLVMRPfXTObalLr5L6g0Q==}
+  cloudinary@2.3.0:
+    resolution: {integrity: sha512-QBa/ePVVfVcVOB1Vut236rjAbTZAArzOm0e2IWUkQJSZFS65Sjf+i3DyRGen4QX8GZzrcbzvKI9b8BTHAv1zqQ==}
     engines: {node: '>=9'}
 
   cluster-key-slot@1.1.2:
@@ -6631,7 +6631,7 @@ snapshots:
 
   clone@1.0.4: {}
 
-  cloudinary@2.2.0:
+  cloudinary@2.3.0:
     dependencies:
       lodash: 4.17.21
       q: 1.5.1
