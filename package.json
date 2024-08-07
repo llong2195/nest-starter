@@ -66,7 +66,7 @@
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.12.0",
-    "qrcode": "^1.5.3",
+    "qrcode": "^1.5.4",
     "reflect-metadata": "^0.2.2",
     "request-ip": "^3.3.0",
     "rxjs": "^7.8.1",
