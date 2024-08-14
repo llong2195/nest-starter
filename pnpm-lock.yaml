@@ -63,8 +63,8 @@ importers:
         specifier: ^7.112.2
         version: 7.114.0
       aws-sdk:
-        specifier: ^2.1673.0
-        version: 2.1673.0
+        specifier: ^2.1674.0
+        version: 2.1674.0
       axios:
         specifier: ^1.7.3
         version: 1.7.3
@@ -1563,8 +1563,8 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
-  aws-sdk@2.1673.0:
-    resolution: {integrity: sha512-7tcc+y7XmCt2aq3vq46xpJTDMNqukFhJOXsQuuwsMZiydZpGG7l7wbpTOtfFhktieSjLg4V9eyznpnZNz5aooA==}
+  aws-sdk@2.1674.0:
+    resolution: {integrity: sha512-VTijN8+pKrf4sfM2t+ISXjypJ+k3AiP6OMzyLoWJ7jfMBtBfWbQc1rN07OndNb0CZRBBukOHoBhYDPuyae+/1Q==}
     engines: {node: '>= 10.0.0'}
 
   axios@1.7.3:
@@ -6296,7 +6296,7 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.0.0
 
-  aws-sdk@2.1673.0:
+  aws-sdk@2.1674.0:
     dependencies:
       buffer: 4.9.2
       events: 1.1.1
