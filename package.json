@@ -41,7 +41,7 @@
     "@nestjs/swagger": "^7.4.0",
     "@nestjs/throttler": "^6.1.1",
     "@nestjs/typeorm": "^10.0.2",
-    "@sentry/node": "^8.25.0",
+    "@sentry/node": "^8.26.0",
     "@sentry/tracing": "^7.112.2",
     "aws-sdk": "^2.1673.0",
     "axios": "^1.7.4",
