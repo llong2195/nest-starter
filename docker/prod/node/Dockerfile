@@ -1,4 +1,4 @@
-FROM node:20.15-alpine AS builder
+FROM node:20.18.0-alpine AS builder
 
 WORKDIR /usr/src/app
 
@@ -12,7 +12,7 @@ RUN rm -rf dist
 
 RUN npm run build
 
-FROM node:20.15-alpine
+FROM node:20.18.0-alpine
 
 WORKDIR /usr/src/app
 
