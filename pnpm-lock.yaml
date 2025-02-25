@@ -68,9 +68,6 @@ importers:
       content-disposition:
         specifier: ^0.5.4
         version: 0.5.4
-      crypto-js:
-        specifier: ^4.2.0
-        version: 4.2.0
       csv-parse:
         specifier: ^5.6.0
         version: 5.6.0
@@ -150,9 +147,6 @@ importers:
       '@types/content-disposition':
         specifier: ^0.5.8
         version: 0.5.8
-      '@types/crypto-js':
-        specifier: ^4.2.2
-        version: 4.2.2
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.0
@@ -1544,9 +1538,6 @@ packages:
   '@types/cookiejar@2.1.5':
     resolution: {integrity: sha512-he+DHOWReW0nghN24E1WUqM0efK4kI9oTqDm6XmK8ZPe2djZ90BSNdGnIyCLzCPw7/pogPlGbzI2wHGGmi4O/Q==}
 
-  '@types/crypto-js@4.2.2':
-    resolution: {integrity: sha512-sDOLlVbHhXpAUAL0YHDUUwDZf3iN4Bwi4W6a0W0b+QcAezUbRtH4FVb+9J4h+XFPW7l/gQ9F8qC7P+Ec4k8QVQ==}
-
   '@types/ejs@3.1.5':
     resolution: {integrity: sha512-nv+GSx77ZtXiJzwKdsASqi+YQ5Z7vwHsTP0JY2SiQgjGckkBRKZnk8nIM+7oUZ1VCtuTz0+By4qVR7fqzp/Dfg==}
 
@@ -2382,9 +2373,6 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
-
-  crypto-js@4.2.0:
-    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
 
   css-select@5.1.0:
     resolution: {integrity: sha512-nwoRF1rvRRnnCqqY7updORDsuqKzqYJ28+oSMaJMMgOauh3fvwHqMS7EZpIPqK8GL+g9mKxF1vP/ZjSeNjEVHg==}
@@ -6925,8 +6913,6 @@ snapshots:
 
   '@types/cookiejar@2.1.5': {}
 
-  '@types/crypto-js@4.2.2': {}
-
   '@types/ejs@3.1.5':
     optional: true
 
@@ -7941,8 +7927,6 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
-
-  crypto-js@4.2.0: {}
 
   css-select@5.1.0:
     dependencies:
