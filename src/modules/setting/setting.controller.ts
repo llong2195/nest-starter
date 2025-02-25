@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
-import { CreateSettingDto } from './dto/create-setting.dto';
-import { UpdateSettingDto } from './dto/update-setting.dto';
 import { SettingService } from './setting.service';
 
-@Controller('setting')
+@ApiTags('v1/setting')
+@Controller({ version: '1', path: 'setting' })
 export class SettingController {
-    constructor(private readonly settingService: SettingService) {}
+  constructor(private readonly settingService: SettingService) {}
 }

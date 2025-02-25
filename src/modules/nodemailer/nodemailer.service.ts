@@ -1,45 +1,44 @@
-import { Queue } from 'bull';
+import { Queue } from 'bullmq';
 
+import { QueueEnum, TopicEnum } from '@/common/enums/queue.enum';
+import { LoggerService } from '@/common/logger/custom.logger';
 import { MailerService } from '@nestjs-modules/mailer';
-import { InjectQueue } from '@nestjs/bull';
+import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
-import { LoggerService } from '@src/logger/custom.logger';
 
-export const QUEUE_EMAIL = 'QUEUE_EMAIL';
-export const QUEUE_EMAIL_SENDMAIL = 'QUEUE_EMAIL_SENDMAIL';
 @Injectable()
 export class NodemailerService {
-    constructor(
-        private readonly mailerService: MailerService,
-        @InjectQueue(QUEUE_EMAIL) private queueMail: Queue,
-    ) {}
+  constructor(
+    private readonly mailerService: MailerService,
+    @InjectQueue(QueueEnum.EMAIL_QUEUE) private queueMail: Queue,
+    private readonly logger: LoggerService,
+  ) {}
 
-    public async example(): Promise<void> {
-        this.mailerService
-            .sendMail({
-                to: 'email@gmail.com',
-                from: 'noreply@nestjs.com',
-                subject: 'Testing Nest Mailermodule with template ✔',
-                template: 'welcome',
-                context: {
-                    // Data to be sent to template engine.
-                },
-            })
-            .catch(e => {
-                LoggerService.error(e);
-            });
-    }
+  async example(): Promise<void> {
+    await this.mailerService
+      .sendMail({
+        to: 'email@gmail.com',
+        from: 'noreply@gmail.com',
+        subject: 'Testing Nest Mailermodule with template ✔',
+        template: 'welcome',
+        context: {
+          // Data to be sent to template engine.
+        },
+      })
+      .catch((e) => {
+        this.logger.error(e);
+      });
+  }
 
-    async sendMailwithQueue(data: string) {
-        try {
-            const job = await this.queueMail.add(QUEUE_EMAIL_SENDMAIL, {
-                data: data,
-            });
-            console.log(job.id);
-            return job.id;
-        } catch (e) {
-            LoggerService.error(e);
-            throw e;
-        }
+  async sendMailwithQueue(data: string) {
+    try {
+      const job = await this.queueMail.add(TopicEnum.EMAIL_SENDMAIL, {
+        data: data,
+      });
+      return job.id;
+    } catch (e) {
+      this.logger.error(e);
+      throw e;
     }
+  }
 }

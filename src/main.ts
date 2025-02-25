@@ -1,125 +1,166 @@
-import { ForbiddenException, INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
-import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import { json, urlencoded } from 'express';
 import helmet from 'helmet';
 
-import { ValidationConfig } from '@configs/validation.config';
-import { LoggerService } from '@src/logger/custom.logger';
-import { ValidatorsModule } from '@validators/validators.module';
-import { AppModule } from './app.module';
-import { EnvEnum } from './enums/app.enum';
-import { I18nService } from './i18n/i18n.service';
-import { isEnv } from './utils/util';
+import {
+  ForbiddenException,
+  INestApplication,
+  LogLevel,
+  ValidationPipe,
+  VersioningType,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import {
+  ExpressAdapter,
+  NestExpressApplication,
+} from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-// import bodyParser from 'body-parser';
-declare const module: any;
+import { AppModule } from './app.module';
+import { EnvEnum } from './common/enums';
+import { LoggerService } from './common/logger/custom.logger';
+import { I18nService } from './common/shared/i18n.service';
+import { ValidatorsModule } from './common/validators/validators.module';
+import { ValidationConfig } from './configs';
+import { isEnv, isProd } from './utils';
 
 async function bootstrap() {
-    let logLevelsDefault: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
+  let logLevelsDefault: LogLevel[] = [
+    'log',
+    'error',
+    'warn',
+    'debug',
+    'verbose',
+  ];
 
-    if (isEnv(EnvEnum.Production) || isEnv(EnvEnum.Staging)) {
-        const logLevel = process.env.LOG_LEVEL || 'log,error,warn,debug,verbose';
-        logLevelsDefault = logLevel.split(',') as LogLevel[];
-    }
-    const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(), {
-        logger: logLevelsDefault,
-        snapshot: true,
+  if (isEnv(EnvEnum.Production) || isEnv(EnvEnum.Staging)) {
+    const logLevel = process.env.LOG_LEVEL || 'error,debug,verbose';
+    logLevelsDefault = logLevel.split(',') as LogLevel[];
+  }
+
+  const app = await NestFactory.create<NestExpressApplication>(
+    AppModule,
+    new ExpressAdapter(),
+    {
+      logger: logLevelsDefault,
+    },
+  );
+
+  // ------------- Config ---------------
+  const configService = app.get(ConfigService);
+  const port: number = configService.get<number>('PORT') || 4000;
+  const LISTEN_ON: string = configService.get<string>('LISTEN_ON') || '0.0.0.0';
+  const DOMAIN_WHITELIST: string[] = (
+    configService.get<string>('DOMAIN_WHITELIST') || '*'
+  ).split(',');
+  const API_PREFIX = configService.get<string>('API_PREFIX') || 'api';
+  // -------------------------------------------
+
+  // -------------- Middleware --------------
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
+  // -------------------------------------------
+
+  // -------------- Global filter/pipes --------------
+  app.setGlobalPrefix(API_PREFIX);
+  app.useGlobalPipes(new ValidationPipe(ValidationConfig));
+  app.enableVersioning({ type: VersioningType.URI });
+  // -------------------------------------------
+
+  // -------------- Setup Cors --------------
+  if (isProd()) {
+    app.use(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      helmet({
+        crossOriginResourcePolicy: false,
+      }),
+    );
+    app.enableCors({
+      origin: (origin, callback) => {
+        if (
+          DOMAIN_WHITELIST.indexOf('*') !== -1 ||
+          (origin && DOMAIN_WHITELIST.indexOf(origin) !== -1)
+        ) {
+          callback(null, true);
+        } else {
+          callback(
+            new ForbiddenException(
+              `The CORS policy for this site does not allow access from the specified Origin.`,
+            ),
+            false,
+          );
+        }
+      },
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     });
-    // ------------- Config ---------------
-    const configService = app.get(ConfigService);
-    const port: number = configService.get<number>('PORT');
-    const LISTEN_ON: string = configService.get<string>('LISTEN_ON') || '0.0.0.0';
-    const DOMAIN_WHITELIST: string[] = (configService.get<string>('DOMAIN_WHITELIST') || '*').split(',');
-    // -------------------------------------------
-
-    // -------------- Middleware --------------
-    app.use(json({ limit: '50mb' }));
-    app.use(urlencoded({ extended: true, limit: '50mb' }));
-    // app.use('/payment/hooks', bodyParser.raw({ type: 'application/json' })); // webhook use rawBody
-    // -------------------------------------------
-
-    // -------------- Global filter/pipes --------------
-    app.useGlobalPipes(new ValidationPipe(ValidationConfig));
-    app.setGlobalPrefix(configService.get<string>('API_PREFIX'));
-    // -------------------------------------------
-
-    // -------------- Setup Cors --------------
-    if (isEnv(EnvEnum.Dev)) {
-        app.enableCors({
-            origin: '*',
-            optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-        });
-        // -----------Setup Swagger-------------
-        await ConfigDocument(app);
-        // -------------------------------------------
-    } else {
-        app.use(
-            helmet({
-                crossOriginResourcePolicy: false,
-            }),
-        );
-        app.enableCors({
-            origin: (origin, callback) => {
-                if (DOMAIN_WHITELIST.indexOf('*') !== -1 || DOMAIN_WHITELIST.indexOf(origin) !== -1) {
-                    callback(null, true);
-                } else {
-                    callback(
-                        new ForbiddenException(
-                            `The CORS policy for this site does not allow access from the specified Origin.`,
-                        ),
-                        false,
-                    );
-                }
-            },
-            optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-        });
-    }
-    // -------------------------------------------
-
-    // -----------------Validator-----------------
-    useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
-    // -------------------------------------------
-
-    // -----------I18nService init-------------
-    I18nService.init();
-    // -------------------------------------------
-
-    // -----------Setup Redis Adapter-------------
-    // await initAdapters(app);
-    // -------------------------------------------
-
-    await app.listen(port, LISTEN_ON, async () => {
-        LoggerService.log(`==========================================================`);
-        LoggerService.log(`Server is running on port : ${port}`, 'Server');
-        LoggerService.log(`Application is running on : ${await app.getUrl()}`, 'Application');
-        LoggerService.log(`==========================================================`);
+    // await app.register(helmet);
+  } else {
+    app.enableCors({
+      origin: '*',
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     });
+    // -----------Setup Swagger-------------
+    ConfigDocument(app, `${API_PREFIX}/docs`);
+    // -------------------------------------------
+  }
 
-    if (module.hot) {
-        module.hot.accept();
-        module.hot.dispose(() => app.close());
+  // -------------------------------------------
+
+  // -----------------Validator-----------------
+  useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
+  // -------------------------------------------
+
+  // -----------I18nService init-------------
+  I18nService.init();
+  // -------------------------------------------
+
+  // -----------Setup Redis Adapter-------------
+  // await initAdapters(app);
+  // -------------------------------------------
+
+  await app.listen(port, LISTEN_ON, () => {
+    LoggerService.log(
+      `==========================================================`,
+    );
+    LoggerService.log(`Server is running on port : ${port}`, 'Server');
+    LoggerService.log(
+      `Application is running on : http://127.0.0.1:${port}`,
+      'Application',
+    );
+    if (!isProd()) {
+      LoggerService.log(`Swagger: http://127.0.0.1:${port}/${API_PREFIX}/docs`);
     }
+    LoggerService.log(
+      `==========================================================`,
+    );
+  });
 }
 
-async function ConfigDocument(app: INestApplication): Promise<void> {
-    const config = new DocumentBuilder()
-        .setTitle('API')
-        .setDescription('API docs')
-        .setVersion('1.0')
-        .addTag('Document For API')
-        .addBearerAuth({ type: 'http', in: 'header', scheme: 'bearer', bearerFormat: 'JWT' })
-        .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('docs', app, document);
-    LoggerService.log(`==========================================================`);
-    LoggerService.log(`Swagger Init: /docs`, ConfigDocument.name);
-    LoggerService.log(`==========================================================`);
+function ConfigDocument(app: INestApplication, path: string) {
+  const config = new DocumentBuilder()
+    .setTitle('API')
+    .setDescription('API docs')
+    .setVersion('1.0')
+    .addTag('Document For API')
+    .addBearerAuth({
+      type: 'http',
+      in: 'header',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    })
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup(path, app, document);
+  LoggerService.log(
+    `==========================================================`,
+  );
+  LoggerService.log(`Swagger Init: /${path}`, ConfigDocument.name);
+  LoggerService.log(
+    `==========================================================`,
+  );
 }
 
-bootstrap();
+void bootstrap();
 
 // runInCluster(bootstrap);

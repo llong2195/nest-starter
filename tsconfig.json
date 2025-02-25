@@ -1,78 +1,28 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "declaration": true,
-        "removeComments": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "target": "ES2021",
-        "newLine": "lf",
-        "sourceMap": true,
-        "outDir": "./dist",
-        "baseUrl": "./",
-        "incremental": true,
-        "skipLibCheck": true,
-        "strictNullChecks": false,
-        "noImplicitAny": false,
-        "strictBindCallApply": false,
-        "forceConsistentCasingInFileNames": false,
-        "noFallthroughCasesInSwitch": false,
-        "paths": {
-            "@configs/*": [
-                "src/configs/*"
-            ],
-            "@base/*": [
-                "src/base/*"
-            ],
-            "@validators/*": [
-                "src/validators/*"
-            ],
-            "@modules/*": [
-                "src/modules/*"
-            ],
-            "@logger/*": [
-                "src/logger/*"
-            ],
-            "@exceptions/*": [
-                "src/exceptions/*"
-            ],
-            "@decorators/*": [
-                "src/decorators/*"
-            ],
-            "@enums/*": [
-                "src/enums/*"
-            ],
-            "@constants/*": [
-                "src/constants/*"
-            ],
-            "@entities/*": [
-                "src/entities/*"
-            ],
-            "@guard/*": [
-                "src/guard/*"
-            ],
-            "@utils/*": [
-                "src/utils/*"
-            ],
-            "@i18n/*": [
-                "src/i18n/*"
-            ],
-            "@libs/*": [
-                "src/libs/*"
-            ],
-            "@src/*": [
-                "src/*"
-            ]
-        }
-    },
-    "include": [
-        ".eslintrc.js",
-        "src/**/*",
-        "test/**/*"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "module": "CommonJS",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2024",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "newLine": "lf",
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@/*": ["src/*"],
+      "@common/*": ["src/common/*"],
+      "@modules/*": ["src/modules/*"],
+      "@configs/*": ["src/configs/*"]
+    }
+  },
+  "include": [".eslintrc.js", "src/**/*", "test/**/*"],
+  "exclude": ["node_modules"]
 }

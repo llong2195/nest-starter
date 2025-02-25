@@ -1,40 +1,72 @@
-version: '3.8'
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker Compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+
+name: nest-starter
 
 services:
-  workspace:
+  server:
+    container_name: nest-starter
     build:
       context: .
-      dockerfile: docker/debug/node/Dockerfile
-    image: nest_workspace
-    restart: on-failure
-    container_name: nest_workspace
-    ports:
-      - ${PORT}:${PORT}
-    volumes:
-      - ./:/usr/src/app
-      - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: development
     env_file:
       - .env
-    networks:
-      - internal
-    tty: true
-    stdin_open: true
-  mysql:
-    image: mysql:8.0
-    restart: always
-    container_name: nest-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: nest-base
-      MYSQL_USER: nest-base
-      MYSQL_PASSWORD: secret
     ports:
-      - "3307:3306"
+      - 4401:4401
+    restart: on-failure
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
     volumes:
-      - .mysql-data:/var/lib/mysql
-    networks:
-      - internal
-networks:
-  internal:
-    name: internal
-    driver: bridge
+      - redis:/data
+
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    user: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=password
+    expose:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD', 'pg_isready']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: password
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+    ports:
+      - '5444:80'
+    restart: unless-stopped
+
+volumes:
+  redis:
+  postgres:
+  pgadmin:

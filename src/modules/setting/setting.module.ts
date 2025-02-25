@@ -1,15 +1,13 @@
+import { SettingEntity } from '@/database/pg/entities/entities';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { SettingEntity } from '@entities/setting.entity';
-
 import { SettingController } from './setting.controller';
-import { SettingRepository } from './setting.repository';
 import { SettingService } from './setting.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([SettingEntity])],
-    controllers: [SettingController],
-    providers: [SettingService, SettingRepository],
+  imports: [TypeOrmModule.forFeature([SettingEntity])],
+  controllers: [SettingController],
+  providers: [SettingService],
 })
 export class SettingModule {}

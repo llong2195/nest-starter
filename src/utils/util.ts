@@ -1,17 +1,27 @@
-import camelCase from 'lodash.camelcase';
-import CryptoJS from 'crypto-js';
-import moment from 'moment';
-import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';
-import { PassThrough } from 'stream';
+import { ClassConstructor, plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
+import * as CryptoJS from 'crypto-js';
+import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
+import { Readable } from 'node:stream';
+
+import { ValidateError } from '@/common/exceptions/errors';
+import { ValidationConfig } from '@/configs';
+import { ValidationError } from '@nestjs/common';
 
 /**
  *
  * @returns
  */
 export function isDev(): boolean {
-    const node_env = process.env.NODE_ENV || 'development';
+  const node_env = process.env.NODE_ENV || 'development';
 
-    return 'development' === node_env;
+  return 'development' === node_env;
+}
+
+export function isProd(): boolean {
+  const node_env = process.env.NODE_ENV || 'development';
+
+  return 'production' === node_env;
 }
 
 /**
@@ -20,8 +30,8 @@ export function isDev(): boolean {
  * @returns
  */
 export function isEnv(env: string): boolean {
-    const envSystem = process.env.NODE_ENV || 'development';
-    return env === envSystem;
+  const envSystem = process.env.NODE_ENV || 'development';
+  return env === envSystem;
 }
 
 /**
@@ -30,13 +40,14 @@ export function isEnv(env: string): boolean {
  * @returns
  */
 export function randomString(length = 10): string {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const lastIndex = characters.length - 1;
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * lastIndex));
-    }
-    return result;
+  let result = '';
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const lastIndex = characters.length - 1;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * lastIndex));
+  }
+  return result;
 }
 
 /**
@@ -44,9 +55,22 @@ export function randomString(length = 10): string {
  * @returns
  */
 export function getFullDate(): string {
-    const now = new Date();
-    return `${now.getFullYear()}_${now.getMonth()}_${now.getDay()}_${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}`;
+  const now = new Date();
+  return `${now.getFullYear()}_${now.getMonth()}_${now.getDay()}_${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}`;
 }
+
+/**
+ * Converts a Buffer into a readable stream.
+ *
+ * @param buffer - The buffer to be converted into a stream.
+ * @returns A readable stream containing the data from the buffer.
+ */
+export const bufferToStream = (buffer: Buffer) => {
+  const stream = new Readable();
+  stream.push(buffer);
+  stream.push(null);
+  return stream;
+};
 
 /**
  *
@@ -54,8 +78,8 @@ export function getFullDate(): string {
  * @returns
  */
 export const base64Encode = (str: string) => {
-    const b = Buffer.from(str);
-    return b.toString('base64');
+  const b = Buffer.from(str);
+  return b.toString('base64');
 };
 
 /**
@@ -64,67 +88,9 @@ export const base64Encode = (str: string) => {
  * @returns
  */
 export const base64Decode = (str: string) => {
-    const b = Buffer.from(str, 'base64');
-    return b.toString();
+  const b = Buffer.from(str, 'base64');
+  return b.toString();
 };
-
-/**
- *
- * @param str
- * @returns
- */
-export const telephoneCheckAndGet = (str: string): string | null => {
-    const phone = str.replace(/[^0-9]/g, '');
-
-    const isPhone = /^($|(084|84|))(0?[3|5|7|8|9])([0-9]{8})\b/g.test(phone);
-
-    const isHomePhone = /^($|(084|84|))(0?2)([0-9]{9})\b/g.test(phone);
-
-    if (isPhone || isHomePhone) {
-        return toStandard(phone);
-    }
-
-    return null;
-};
-
-/**
- *
- * @param phone
- * @returns
- */
-export const toStandard = (phone: string): string => {
-    if ((phone.length === 10 || phone.length === 11) && phone[0] === '0') {
-        return `84${phone}`.replace(/840/g, '84');
-    } else {
-        let p = phone;
-        if (p[0] === '0') {
-            p = p.replace(/084/g, '84');
-        }
-
-        if (p[2] === '0') {
-            p = p.replace(/840/g, '84');
-        }
-
-        return p;
-    }
-};
-
-/**
- * It takes a string, removes the first and last characters of the string, and returns the result
- * @param {string} str - The string to be trimmed.
- * @param {string} trim_str - The string to trim from the beginning and end of the string.
- */
-export const trim = (str: string, trim_str: string) => {
-    const reg = new RegExp(`^${trim_str}+|${trim_str}+$`, 'gm');
-    return camelCase(str.replace(reg, ''));
-};
-
-/**
- *
- * @param str
- * @returns
- */
-export const toSnakeCase = (str: string): string => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
 
 /**
  *
@@ -132,10 +98,10 @@ export const toSnakeCase = (str: string): string => str.replace(/[A-Z]/g, letter
  * @param max
  * @returns
  */
-export const getRandomInt = (min: number, max: number): number => {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1) + min);
+export const randomInt = (min: number, max: number): number => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 /**
@@ -144,50 +110,10 @@ export const getRandomInt = (min: number, max: number): number => {
  * @returns
  */
 export const currentTimestamp = (second = true): number => {
-    if (second) {
-        return Math.round(Date.now() / 1000);
-    }
-    return Date.now();
-};
-
-/**
- *
- * @param second
- * @returns
- */
-export const startTimeOfDay = (second = true): string | number => {
-    if (second) {
-        return moment().utcOffset(7).startOf('day').unix();
-    }
-    return moment().utcOffset(7).startOf('day').format('x');
-};
-
-/**
- *
- * @param time unixtime
- * @param second
- * @returns
- */
-export const startTimeOfADay = (time: number, second = true): string | number => {
-    if (second) {
-        return moment(time * 1000)
-            .utcOffset(7)
-            .startOf('day')
-            .unix();
-    }
-    return moment(time * 1000)
-        .utcOffset(7)
-        .startOf('day')
-        .format('x');
-};
-
-/**
- *
- * @param m
- * @returns
- */
-export const convertMtoKm = (m: number): number => {
-    return Math.round((m * 100) / 1000) / 100;
+  if (second) {
+    return Math.round(Date.now() / 1000);
+  }
+  return Date.now();
 };
 
 /**
@@ -196,7 +122,7 @@ export const convertMtoKm = (m: number): number => {
  * @returns
  */
 export function uniq<T>(a: T[]): T[] {
-    return Array.from(new Set(a));
+  return Array.from(new Set(a));
 }
 
 /**
@@ -205,78 +131,250 @@ export function uniq<T>(a: T[]): T[] {
  * @returns
  */
 export const sleep = async (ms: number): Promise<unknown> => {
-    return new Promise(resolve => {
-        setTimeout(resolve, ms);
-    });
-};
-
-/**
- *
- * @param strDate
- * @returns
- */
-export const toTimestamp = (strDate: string) => {
-    const datum = Date.parse(strDate);
-    return datum / 1000;
-};
-
-/**
- *
- * @param birthday
- * @returns
- */
-export const caculateAge = (birthday: string | Date): number => {
-    const birthdayYear = new Date(birthday).getFullYear();
-    const currentYear = new Date().getFullYear();
-
-    return currentYear - birthdayYear;
-};
-
-/**
- *
- * @param text
- * @param size
- * @param qualityLevel
- * @returns
- */
-export const generateQR = async (text: string, size = 108, qualityLevel = 'M') => {
-    // const qrStream = await QRCode.toDataURL(text, { //errorCorrectionLevel: 'L', version: 8 })
-    const qrStream = new PassThrough();
-    await QRCode.toFileStream(qrStream, text, {
-        // type: 'png',
-        width: size,
-        errorCorrectionLevel: qualityLevel,
-    } as QRCodeToFileStreamOptions);
-    // console.log(text, url, qrStream)
-    return qrStream;
-};
-
-/**
- *
- * @param fromTime
- * @param toTime
- * @returns
- */
-export const getDaysDiff = (fromTime: number, toTime: number, tzOffset = -7): number => {
-    const OneHour = 3600; //60 * 60,
-    const OneDay = 86400; //24 * 60 * 60,
-    fromTime = Math.ceil((fromTime - tzOffset * OneHour) / OneDay) * OneDay;
-    toTime = Math.ceil((toTime - tzOffset * OneHour) / OneDay) * OneDay;
-
-    return Math.floor((toTime - fromTime) / OneDay);
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 };
 
 export const encryptObj = (obj: any, secretKey: string): string => {
-    // return CryptoJS.AES.encrypt(JSON.stringify(obj), secretKey).toString();
-    const encJson = CryptoJS.AES.encrypt(JSON.stringify(obj), secretKey).toString();
-    const encData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encJson));
-    return encData;
+  // Generate a random IV (Initialization Vector)
+  const iv = randomBytes(16);
+
+  // Create cipher with AES-256-CBC
+  const cipher = createCipheriv('aes-256-cbc', Buffer.from(secretKey), null);
+
+  // Encrypt the data
+  let encrypted = cipher.update(JSON.stringify(obj), 'utf8', 'base64');
+  encrypted += cipher.final('base64');
+
+  // Combine IV and encrypted data, then encode to base64
+  const combined = Buffer.concat([iv, Buffer.from(encrypted, 'base64')]);
+  return combined.toString('base64');
 };
 
 export const decryptObj = (encryptText: string, secretKey: string): unknown => {
-    // const bytes = CryptoJS.AES.decrypt(encryptText, secretKey);
-    // return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    const decData = CryptoJS.enc.Base64.parse(encryptText).toString(CryptoJS.enc.Utf8);
-    const bytes = CryptoJS.AES.decrypt(decData, secretKey).toString(CryptoJS.enc.Utf8);
-    return JSON.parse(bytes);
+  // Decode from base64
+  const combined = Buffer.from(encryptText, 'base64');
+
+  // Extract IV and encrypted data
+  const iv = combined.subarray(0, 16);
+  const encrypted = combined.subarray(16);
+
+  // Create decipher
+  const decipher = createDecipheriv('aes-256-cbc', Buffer.from(secretKey), iv);
+
+  // Decrypt the data
+  let decrypted = decipher.update(encrypted).toString('utf8');
+  decrypted += decipher.final('utf8');
+
+  return JSON.parse(decrypted);
+};
+
+/**
+ * Converts an object to a Map<string, string>.
+ *
+ * @param obj - The object to be converted.
+ * @returns The resulting Map<string, string>.
+ */
+export const objectToFlatMap = (
+  obj: Record<string, unknown>,
+): Map<string, string> => {
+  const map = new Map<string, string>();
+  const stack = [{ obj, prefix: '' }];
+
+  while (stack.length > 0) {
+    const top = stack.pop();
+    if (!top) {
+      break;
+    }
+    const { obj, prefix } = top;
+
+    for (const key in obj) {
+      if (obj[key] === null || obj[key] === undefined) {
+        continue;
+      }
+
+      if (Array.isArray(obj[key])) {
+        (obj[key] as unknown[]).forEach((item, index) => {
+          if (typeof item === 'object' && item !== null) {
+            stack.push({
+              obj: item as Record<string, unknown>,
+              prefix: `${prefix}${key}.${index}.`,
+            });
+          } else {
+            map.set(`${prefix}${key}.${index}`, String(item));
+          }
+        });
+      } else if (typeof obj[key] === 'object') {
+        stack.push({
+          obj: obj[key] as Record<string, unknown>,
+          prefix: `${prefix}${key}.`,
+        });
+      } else {
+        map.set(`${prefix}${key}`, obj[key] as string);
+      }
+    }
+  }
+  return map;
+};
+
+export const validateDto = async <T>(
+  data: unknown,
+  cls: ClassConstructor<T>,
+): Promise<T> => {
+  const obj = plainToInstance(cls, data);
+  const options = ValidationConfig;
+  const errors = await validate(obj as object, options);
+  if (errors.length > 0) {
+    function flattenValidationErrors(
+      validationErrors: ValidationError[],
+    ): string[] {
+      return validationErrors
+        .map((error) => mapChildrenToValidationErrors(error))
+        .flat()
+        .filter((item) => !!item.constraints)
+        .map((item) =>
+          item.constraints ? Object.values(item.constraints) : [],
+        )
+        .flat();
+    }
+
+    function mapChildrenToValidationErrors(
+      error: ValidationError,
+      parentPath?: string,
+    ): ValidationError[] {
+      if (!(error.children && error.children.length)) {
+        return [error];
+      }
+      const validationErrors: ValidationError[] = [];
+      parentPath = parentPath
+        ? `${parentPath}.${error.property}`
+        : error.property;
+      for (const item of error.children) {
+        if (item.children && item.children.length) {
+          validationErrors.push(
+            ...mapChildrenToValidationErrors(item, parentPath),
+          );
+        }
+        validationErrors.push(
+          prependConstraintsWithParentProp(parentPath, item),
+        );
+      }
+      return validationErrors;
+    }
+
+    function prependConstraintsWithParentProp(
+      parentPath: string,
+      error: ValidationError,
+    ): ValidationError {
+      const constraints: { [key: string]: string } = {};
+      for (const key in error.constraints) {
+        constraints[key] = `${parentPath}.${error.constraints[key]}`;
+      }
+      return {
+        ...error,
+        constraints,
+      };
+    }
+
+    const errorMessages = flattenValidationErrors(errors).join('; ');
+    throw new ValidateError(errorMessages);
+  }
+  return obj;
+};
+
+/**
+ * Converts an array to a map using a specified key.
+ *
+ * @template T - The type of the array elements.
+ * @param {T[]} arr - The array to convert.
+ * @param {string} key - The key to use for mapping.
+ * @returns {Map<string, T>} - The resulting map.
+ */
+export const arrayToMap = <T>(arr: T[], key: keyof T): Map<string, T> => {
+  const map = new Map<string, T>();
+  arr.forEach((obj) => {
+    if (obj[key] !== undefined) {
+      map.set(String(obj[key]), obj);
+    }
+  });
+  return map;
+};
+
+/**
+ * Converts a Map to an array of its values.
+ *
+ * @template T - The type of the values in the Map.
+ * @param {Map<string, T>} map - The Map to convert.
+ * @returns {T[]} An array containing the values from the Map.
+ */
+export const mapToArray = <T>(map: Map<string, T>): T[] => {
+  const arr: T[] = [];
+  map.forEach((value) => {
+    arr.push(value);
+  });
+  return arr;
+};
+
+/**
+ * Removes specified keys from an object.
+ *
+ * @template T - The type of the object.
+ * @param {T} obj - The object from which keys will be removed.
+ * @param {Array<keyof T>} keys - An array of keys to be removed from the object.
+ */
+export const removeKeysFromObj = <T>(obj: T, keys: Array<keyof T>) => {
+  // Remove keys from the object
+  keys.forEach((key) => {
+    delete obj?.[key];
+  });
+};
+
+/**
+ * Attempts to execute a callback function multiple times until it succeeds
+ *
+ * @param callback - An async function to be executed
+ * @param opt - Optional configuration object
+ * @param opt.retry - Number of retry attempts (default: 3)
+ * @param opt.delay - Delay in milliseconds between retries (default: 1000)
+ *
+ * @returns A Promise that resolves with the callback's return value
+ *
+ * @throws Error if all retry attempts fail
+ *
+ * @example
+ * ```typescript
+ * const result = await tryToSuccess(
+ *   async () => await someAsyncOperation(),
+ *   { retry: 5, delay: 2000 }
+ * );
+ * ```
+ */
+export const tryToSuccess = async <T>(
+  callback: () => Promise<T>,
+  opt?: {
+    /**
+     * Number of retries. Default is 3.
+     */
+    retry?: number;
+    /**
+     * Delay in milliseconds before retrying. Default is 1000ms.
+     */
+    delay?: number;
+  },
+): Promise<T> => {
+  const retry = opt?.retry || 3;
+  const delay = opt?.delay || 1000;
+  let count = 0;
+  while (count < retry) {
+    try {
+      count++;
+      const rs = await callback();
+      return rs;
+    } catch (error: unknown) {
+      console.debug('🚀 ~ error:', error);
+      await sleep(delay);
+    }
+  }
+  throw new Error('Try to success failed');
 };
