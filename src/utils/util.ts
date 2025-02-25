@@ -1,6 +1,5 @@
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import * as CryptoJS from 'crypto-js';
 import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
 import { Readable } from 'node:stream';
 
