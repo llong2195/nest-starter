@@ -124,8 +124,8 @@ importers:
         version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
     devDependencies:
       '@eslint/js':
-        specifier: ^9.21.0
-        version: 9.21.0
+        specifier: ^9.24.0
+        version: 9.24.0
       '@nestjs/cli':
         specifier: ^11.0.6
         version: 11.0.6(@swc/cli@0.6.0(@swc/core@1.11.16)(chokidar@4.0.3))(@swc/core@1.11.16)(@types/node@22.13.5)
@@ -521,6 +521,10 @@ packages:
 
   '@eslint/js@9.21.0':
     resolution: {integrity: sha512-BqStZ3HX8Yz6LvsF5ByXYrtigrV5AXADWLAGc7PH/1SxOb7/FIYYMszZZWiUou/GB9P2lXWk2SV4d+Z8h0nknw==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@eslint/js@9.24.0':
+    resolution: {integrity: sha512-uIY/y3z0uvOGX8cp1C2fiC4+ZmBhp6yZWkojtHL1YEMnRt1Y63HB9TM17proGEmeG7HeUY+UP36F0aknKYTpYA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/object-schema@2.1.6':
@@ -5743,6 +5747,8 @@ snapshots:
       - supports-color
 
   '@eslint/js@9.21.0': {}
+
+  '@eslint/js@9.24.0': {}
 
   '@eslint/object-schema@2.1.6': {}
 
