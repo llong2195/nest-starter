@@ -81,7 +81,7 @@
     "@types/luxon": "^3.6.2",
     "@types/mime-types": "^2.1.4",
     "@types/multer": "^1.4.12",
-    "@types/node": "^22.15.21",
+    "@types/node": "^22.15.23",
     "@types/qrcode": "^1.5.5",
     "@types/supertest": "^6.0.3",
     "eslint": "^9.27.0",
