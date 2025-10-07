@@ -43,7 +43,7 @@
     "@supercharge/request-ip": "^1.2.0",
     "axios": "^1.9.0",
     "bcrypt": "^6.0.0",
-    "bullmq": "^5.53.0",
+    "bullmq": "^5.58.5",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "content-disposition": "^0.5.4",
